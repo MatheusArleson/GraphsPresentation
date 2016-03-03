@@ -186,5 +186,19 @@
 			<version>${spring.security.framework.version}</version>
 		</dependency>
 		
+		<!-- MY GRAPHS LIBRARY  -->
+		<dependency>
+			<groupId>br.com.xavier</groupId>
+  			<artifactId>Graphs</artifactId>
+  			<version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>br.com.xavier</groupId>
+			<artifactId>Matrix</artifactId>
+			<version>1.1.0</version>
+			<scope>compile</scope>
+  		</dependency>
+  		
 	</dependencies>
 </project>

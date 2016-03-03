@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<title>Graphs</title>
+
+		<style type="text/css">
+			.ui-widget {
+				font-size: 12px !important;
+			}
+		</style>
+
+	</h:head>
+
+	<h:body>
+
+		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+	
+		<div class="ui-fluid">
+	
+			<p:panelGrid id="configGrid" layout="grid" columns="3"
+						 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
+						 style="border:none;">
+	
+				<p:fieldset legend="Propriedades">
+	
+				</p:fieldset>
+	
+				<p:fieldset legend="Delimitadores">
+	
+				</p:fieldset>
+	
+				<p:fieldset legend="Representação">
+	
+					<p:inputTextarea id="graphRepresentation" autoResize="true"
+						required="true">
+					</p:inputTextarea>
+	
+				</p:fieldset>
+	
+			</p:panelGrid>
+	
+		</div>
+
+	</h:body>
+	
+</html>

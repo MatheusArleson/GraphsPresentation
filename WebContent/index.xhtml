@@ -30,11 +30,11 @@
 			    
 			    g = new Graph();
 			
-			    g.addNode("strawberry");
-			    g.addNode("cherry");
+			    g.addNode("no1");
+			    g.addNode("no2");
 			    
-			    g.addEdge("strawberry", "cherry");
-			    g.addEdge("cherry", "strawberry");
+			    g.addEdge("no1", "no2");
+			    g.addEdge("no2", "no1");
 			
 			    var layouter = new Graph.Layout.Spring(g);
 			    
@@ -50,135 +50,138 @@
 	</h:head>
 
 	<h:body>
-
-		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-	
-		<div id="dataDiv" class="ui-fluid">
-	
-			<p:panelGrid id="configGrid" layout="grid" columns="3"
-						 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
-						 style="border:none;">
-	
-				<p:fieldset legend="Propriedades">
-					<p:panelGrid columns="2">
-						<p:selectBooleanCheckbox id="checkDirectedGraph"
-												 label="Directed Graph"
-												 value="#{pageController.directedGraph}">
-						</p:selectBooleanCheckbox>
-						<p:outputLabel for="checkDirectedGraph" value="Directed"/>
-						
-						<p:selectBooleanCheckbox id="checkWeightedGraph"
-												 label="Weighted Graph"
-												 value="#{pageController.weightedGraph}">
-						</p:selectBooleanCheckbox>
-						<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
-						
-						<p:selectBooleanCheckbox id="checkLoopsGraph"
-												 label="Loops allowed in Graph"
-												 value="#{pageController.loopsAllowed}"
-												 disabled="true">
-						</p:selectBooleanCheckbox>
-						<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
-						
-						<p:selectBooleanCheckbox id="checkMultipleEdgesGraph"
-												 label="Multiple Edges Allowed in Graph"
-												 value="#{pageController.multipleEdgesAllowed}"
-												 disabled="true">
-						</p:selectBooleanCheckbox>
-						<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
-					</p:panelGrid>					
-				</p:fieldset>
-	
-				<p:fieldset legend="Delimitadores">
-					<p:outputPanel id="delimitMainPanel">
-					
-						<p:outputPanel id="edgesListDelimitersPanel" rendered="#{pageController.renderEdgeListDelimiters}">
-							<p:panelGrid columns="2">
-								
-								<p:outputLabel value="Edges List Start:"/>
-								<p:inputText id="delEdgeListStart" label="Adjacency List Start Delimiter"
-											 value="#{pageController.adjListStartDelimiter}"
-											 required="true">
-								</p:inputText>
-								
-								
-							</p:panelGrid>
-						</p:outputPanel>
-						
-						<p:outputPanel id="adjMatrixDelimitersPanel" rendered="#{pageController.renderAdjacencyMatrixDelimiters}">
-							<p:panelGrid columns="2">
-								
-								<p:outputLabel value="Matrix Start:"/>
-								<p:inputText id="delAdjMatrixStart" label="Matrix Start Delimiter"
-											 value="#{pageController.matrixStartDelimiter}"
-											 required="true">
-								</p:inputText>
-								
-								<p:outputLabel value="Matrix End:"/>
-								<p:inputText id="delAdjMatrixEnd" label="Matrix End Delimiter"
-											 value="#{pageController.matrixEndDelimiter}"
-											 required="true">
-								</p:inputText>
-								
-								<p:outputLabel value="Matrix Row:"/>
-								<p:inputText id="delAdjMatrixRow" label="Matrix Row Delimiter"
-											 value="#{pageController.matrixRowSeparator}"
-											 required="true">
-								</p:inputText>
-								
-								<p:outputLabel value="Matrix Row Elements:"/>
-								<p:inputText id="delAjdMatrixRowElem" label="Matrix Row Elements Delimiter"
-											 value="#{pageController.matrixRowElementsSeparator}"
-											 required="true">
-								</p:inputText>
-								
-							</p:panelGrid>
-						</p:outputPanel>
-						
-					</p:outputPanel>
-				</p:fieldset>
-	
-				<p:fieldset legend="Representação">
-					<h:panelGroup id="representationGroup">
-						<p:selectOneMenu id="somRepMode" value="#{pageController.graphRepresentationMode}">
-							<f:selectItems	value="#{pageController.graphRepresentationModes}"
-											var="repMode" 
-											itemLabel="#{repMode.label}"
-											itemValue="#{repMode}">
-							</f:selectItems>
-							
-							<p:ajax event="valueChange"
-									listener="#{pageController.processChangeGraphRepresentationMode}"
-									process="@this"
-									update="delimitMainPanel graphRepresentation">
-							</p:ajax>
-							
-						</p:selectOneMenu>
-						
-						<p:inputTextarea id="graphRepresentation" autoResize="true"
-							required="true">
-						</p:inputTextarea>
-					</h:panelGroup>
-				</p:fieldset>
-	
-			</p:panelGrid>
-	
-		</div>
 		
-		<div id="controlsDiv" class="ui-fluid">
+		<h:form id="mainForm">
+		
+			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+		
+			<div id="dataDiv" class="ui-fluid">
+		
+				<p:panelGrid id="configGrid" layout="grid" columns="3"
+							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
+							 style="border:none;">
+		
+					<p:fieldset legend="Propriedades">
+						<p:panelGrid columns="2">
+							<p:selectBooleanCheckbox id="checkDirectedGraph"
+													 label="Directed Graph"
+													 value="#{pageController.directedGraph}">
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="checkDirectedGraph" value="Directed"/>
+							
+							<p:selectBooleanCheckbox id="checkWeightedGraph"
+													 label="Weighted Graph"
+													 value="#{pageController.weightedGraph}">
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
+							
+							<p:selectBooleanCheckbox id="checkLoopsGraph"
+													 label="Loops allowed in Graph"
+													 value="#{pageController.loopsAllowed}"
+													 disabled="true">
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
+							
+							<p:selectBooleanCheckbox id="checkMultipleEdgesGraph"
+													 label="Multiple Edges Allowed in Graph"
+													 value="#{pageController.multipleEdgesAllowed}"
+													 disabled="true">
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
+						</p:panelGrid>					
+					</p:fieldset>
+		
+					<p:fieldset legend="Delimitadores">
+						<p:outputPanel id="delimitMainPanel">
+						
+							<p:outputPanel id="edgesListDelimitersPanel" rendered="#{pageController.renderEdgeListDelimiters}">
+								<p:panelGrid columns="2">
+									
+									<p:outputLabel value="Edges List Start:"/>
+									<p:inputText id="delEdgeListStart" label="Adjacency List Start Delimiter"
+												 value="#{pageController.adjListStartDelimiter}"
+												 required="true">
+									</p:inputText>
+									
+									
+								</p:panelGrid>
+							</p:outputPanel>
+							
+							<p:outputPanel id="adjMatrixDelimitersPanel" rendered="#{pageController.renderAdjacencyMatrixDelimiters}">
+								<p:panelGrid columns="2">
+									
+									<p:outputLabel value="Matrix Start:"/>
+									<p:inputText id="delAdjMatrixStart" label="Matrix Start Delimiter"
+												 value="#{pageController.matrixStartDelimiter}"
+												 required="true">
+									</p:inputText>
+									
+									<p:outputLabel value="Matrix End:"/>
+									<p:inputText id="delAdjMatrixEnd" label="Matrix End Delimiter"
+												 value="#{pageController.matrixEndDelimiter}"
+												 required="true">
+									</p:inputText>
+									
+									<p:outputLabel value="Matrix Row:"/>
+									<p:inputText id="delAdjMatrixRow" label="Matrix Row Delimiter"
+												 value="#{pageController.matrixRowSeparator}"
+												 required="true">
+									</p:inputText>
+									
+									<p:outputLabel value="Matrix Row Elements:"/>
+									<p:inputText id="delAjdMatrixRowElem" label="Matrix Row Elements Delimiter"
+												 value="#{pageController.matrixRowElementsSeparator}"
+												 required="true">
+									</p:inputText>
+									
+								</p:panelGrid>
+							</p:outputPanel>
+							
+						</p:outputPanel>
+					</p:fieldset>
+		
+					<p:fieldset legend="Representação">
+						<h:panelGroup id="representationGroup">
+							<p:selectOneMenu id="somRepMode" value="#{pageController.graphRepresentationMode}">
+								<f:selectItems	value="#{pageController.graphRepresentationModes}"
+												var="repMode" 
+												itemLabel="#{repMode.label}"
+												itemValue="#{repMode}">
+								</f:selectItems>
+								
+								<p:ajax event="itemSelect"
+										listener="#{pageController.processChangeGraphRepresentationMode}"
+										process="@this somRepMode"
+										update="delimitMainPanel graphRepresentation">
+								</p:ajax>
+								
+							</p:selectOneMenu>
+							
+							<p:inputTextarea id="graphRepresentation" autoResize="true"
+								required="true">
+							</p:inputTextarea>
+						</h:panelGroup>
+					</p:fieldset>
+		
+				</p:panelGrid>
+		
+			</div>
 			
-			<p:panelGrid id="controlsGrid" layout="grid" columns="3"
-						 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
-						 style="border:none;">
+			<div id="controlsDiv" class="ui-fluid">
 				
-				<p:commandButton id="Reset" value="Reset" onclick="redraw();"/>
+				<p:panelGrid id="controlsGrid" layout="grid" columns="3"
+							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
+							 style="border:none;">
+					
+					<p:commandButton id="Reset" value="Reset" onclick="redraw();"/>
+				
+				</p:panelGrid>
 			
-			</p:panelGrid>
+			</div>
+			
+			<div id="graphCanvasDiv" class="ui-fluid" style="border: solid 1px;"/>
 		
-		</div>
-		
-		<div id="graphCanvasDiv" class="ui-fluid" style="border: solid 1px;"/>
-		
+		</h:form>
 	</h:body>
 	
 </html>

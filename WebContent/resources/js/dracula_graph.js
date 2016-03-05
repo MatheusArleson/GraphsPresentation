@@ -195,6 +195,14 @@ Graph.Renderer.Raphael = function(element, graph, width, height) {
     this.draw();
 };
 Graph.Renderer.Raphael.prototype = {
+	setWidth: function(someWidth){
+		this.width = someWidth;
+	},
+	
+	setHeight: function(someHeight){
+		this.height = someHeight;
+	},
+		
     translate: function(point) {
         return [
             (point[0] - this.graph.layoutMinX) * this.factorX + this.radius,

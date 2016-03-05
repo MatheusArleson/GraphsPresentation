@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -7,7 +7,7 @@
 
 	<h:head>
 
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>Graphs</title>
 
 		<style type="text/css">
@@ -16,35 +16,22 @@
 			}
 		</style>
 		
+		<!-- GRAPH DRAWING LIB -->
 		<h:outputScript library="js" name="raphael-min.js"/>
 		<h:outputScript library="js" name="dracula_graffle.js"/>
 		<h:outputScript library="js" name="dracula_graph.js"/>
+		<h:outputScript library="js" name="dracula_graph.js"/>
+		<h:outputScript library="js" name="dracula_empty_render.js"/>
 		
+		<!-- INITIALIZATION OF EMTY CONTAINER -->
 		<h:outputScript>
-			var redraw, g, renderer;
-
 			window.onload = function() {
-			    
-			    var width = $(document).width() - 20;
-			    var height = $(document).height() - 60;
-			    
-			    g = new Graph();
-			
-			    g.addNode("no1");
-			    g.addNode("no2");
-			    
-			    g.addEdge("no1", "no2");
-			    g.addEdge("no2", "no1");
-			
-			    var layouter = new Graph.Layout.Spring(g);
-			    
-			    renderer = new Graph.Renderer.Raphael('graphCanvasDiv', g, width, height);
-			    
-			    redraw = function() {
-			        layouter.layout();
-			        renderer.draw();
-			    };
+				initDracula('graphCanvasDiv');			   
 			};
+			
+			$( window ).resize(function() {
+				redraw();
+			});
 		</h:outputScript>
 		
 	</h:head>
@@ -53,7 +40,11 @@
 		
 		<h:form id="mainForm">
 		
-			<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+			<p:messages id="messages" 
+						showDetail="false" 
+						autoUpdate="true" 
+						closable="true">
+			</p:messages>
 		
 			<div id="dataDiv" class="ui-fluid">
 		
@@ -125,7 +116,7 @@
 									<p:outputLabel value="Matrix Row:"/>
 									<p:inputText id="delAdjMatrixRow" label="Matrix Row Delimiter"
 												 value="#{pageController.matrixRowSeparator}"
-												 required="true">
+												 required="false">
 									</p:inputText>
 									
 									<p:outputLabel value="Matrix Row Elements:"/>
@@ -140,7 +131,7 @@
 						</p:outputPanel>
 					</p:fieldset>
 		
-					<p:fieldset legend="Representação">
+					<p:fieldset legend="RepresentaÃ§Ã£o">
 						<h:panelGroup id="representationGroup">
 							<p:selectOneMenu id="somRepMode" value="#{pageController.graphRepresentationMode}">
 								<f:selectItems	value="#{pageController.graphRepresentationModes}"
@@ -157,8 +148,9 @@
 								
 							</p:selectOneMenu>
 							
-							<p:inputTextarea id="graphRepresentation" autoResize="true"
-								required="true">
+							<p:inputTextarea id="graphRepresentation"
+											 autoResize="true"
+											 required="false">
 							</p:inputTextarea>
 						</h:panelGroup>
 					</p:fieldset>
@@ -173,7 +165,15 @@
 							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
 							 style="border:none;">
 					
-					<p:commandButton id="Reset" value="Reset" onclick="redraw();"/>
+					<p:commandButton id="Reset" 
+									 value="Reset" onclick="redraw();"
+									 process="@this"
+									 update="@this"
+									 type="button">
+					</p:commandButton>
+					
+					<p:commandButton id="Test" value="Test" onclick="g.addNode('node1');g.addNode('node2');g.addEdge('node1','node2');"  type="button"/>
+					<p:commandButton id="Test2" value="Test" onclick="g.addNode('node3');g.addNode('node4');g.addEdge('node2','node3');"  type="button"/>
 				
 				</p:panelGrid>
 			

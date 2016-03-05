@@ -18,7 +18,7 @@
 	</properties>
 
 	<build>
-		<finalName>consultorioweb</finalName>
+		<finalName>graphPresentation</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -190,13 +190,13 @@
 		<dependency>
 			<groupId>br.com.xavier</groupId>
   			<artifactId>Graphs</artifactId>
-  			<version>1.0.0</version>
+  			<version>1.1.0</version>
 		</dependency>
 		
 		<dependency>
   			<groupId>br.com.xavier</groupId>
 			<artifactId>Matrix</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 			<scope>compile</scope>
   		</dependency>
   		

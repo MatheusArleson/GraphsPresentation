@@ -1,10 +1,12 @@
 var redraw, g, renderer, layouter, graphCanvasDivName;
 
 function initDracula(graphCanvasDiv) {
+	console.log('#> initDracula');
+	
 	graphCanvasDivName = graphCanvasDiv;
 	
-	var width = getCanvasWidth();
-    var height = getCanvasHeight();
+	var width = getCanvasWidth(graphCanvasDivName);
+    var height = getCanvasHeight(graphCanvasDivName);
     
     g = new Graph();
 
@@ -13,7 +15,8 @@ function initDracula(graphCanvasDiv) {
 }
 
 function getCanvasHeight(graphCanvasDivId) {
-	var height = $('#' + graphCanvasDivId).height();
+	var elementName = '#' + graphCanvasDivId;
+	var height = $(elementName).height();
 	return height;
 }
 

@@ -1,6 +1,6 @@
-package br.com.xavier.graphs.view;
+package br.com.xavier.graphs.representation.model.enums;
 
-public enum GraphRepresentation {
+public enum GraphRepresentations {
 	
 	//XXX ENUM MEMBERS
 	EDGES_LIST("Edges List"),
@@ -8,7 +8,7 @@ public enum GraphRepresentation {
 	
 	private final String label;
 	
-	private GraphRepresentation(String label) {
+	private GraphRepresentations(String label) {
 		this.label = label;
 	}
 

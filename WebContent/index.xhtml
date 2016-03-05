@@ -25,9 +25,9 @@
 		
 		<!-- INITIALIZATION OF EMTY CONTAINER -->
 		<h:outputScript>
-			window.onload = function() {
+			$( window ).ready(function() {
 				initDracula('graphCanvasDiv');			   
-			};
+			});
 			
 			$( window ).resize(function() {
 				redraw();
@@ -54,43 +54,45 @@
 		
 					<p:fieldset legend="Propriedades">
 						<p:panelGrid columns="2">
+						
 							<p:selectBooleanCheckbox id="checkDirectedGraph"
 													 label="Directed Graph"
-													 value="#{pageController.directedGraph}">
+													 value="#{graphPresentationBean.graphProperties.directedGraph}">
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkDirectedGraph" value="Directed"/>
 							
 							<p:selectBooleanCheckbox id="checkWeightedGraph"
 													 label="Weighted Graph"
-													 value="#{pageController.weightedGraph}">
+													 value="#{graphPresentationBean.graphProperties.weightedGraph}">
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
 							
 							<p:selectBooleanCheckbox id="checkLoopsGraph"
 													 label="Loops allowed in Graph"
-													 value="#{pageController.loopsAllowed}"
+													 value="#{graphPresentationBean.graphProperties.loopsAllowed}"
 													 disabled="true">
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
 							
 							<p:selectBooleanCheckbox id="checkMultipleEdgesGraph"
 													 label="Multiple Edges Allowed in Graph"
-													 value="#{pageController.multipleEdgesAllowed}"
+													 value="#{graphPresentationBean.graphProperties.multipleEdgesAllowed}"
 													 disabled="true">
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
-						</p:panelGrid>					
+						</p:panelGrid>
+						
 					</p:fieldset>
 		
 					<p:fieldset legend="Delimitadores">
 						<p:outputPanel id="delimitMainPanel">
 						
-							<p:outputPanel id="edgesListDelimitersPanel" rendered="#{pageController.renderEdgeListDelimiters}">
+							<p:outputPanel id="edgesListDelimitersPanel" rendered="#{graphPresentationBean.renderEdgeListDelimitersPanel}">
 								<p:panelGrid columns="2">
 									
 									<p:outputLabel value="Edges List Start:"/>
 									<p:inputText id="delEdgeListStart" label="Adjacency List Start Delimiter"
-												 value="#{pageController.adjListStartDelimiter}"
+												 value="#{graphPresentationBean.edgesListRepresentation.representationStartDelimiter}"
 												 required="true">
 									</p:inputText>
 									
@@ -98,30 +100,30 @@
 								</p:panelGrid>
 							</p:outputPanel>
 							
-							<p:outputPanel id="adjMatrixDelimitersPanel" rendered="#{pageController.renderAdjacencyMatrixDelimiters}">
+							<p:outputPanel id="adjMatrixDelimitersPanel" rendered="#{graphPresentationBean.renderAdjacencyMatrixDelimitersPanel}">
 								<p:panelGrid columns="2">
 									
 									<p:outputLabel value="Matrix Start:"/>
 									<p:inputText id="delAdjMatrixStart" label="Matrix Start Delimiter"
-												 value="#{pageController.matrixStartDelimiter}"
+												 value="#{graphPresentationBean.adjMatrixRepresentation.representationStartDelimiter}"
 												 required="true">
 									</p:inputText>
 									
 									<p:outputLabel value="Matrix End:"/>
 									<p:inputText id="delAdjMatrixEnd" label="Matrix End Delimiter"
-												 value="#{pageController.matrixEndDelimiter}"
+												 value="#{graphPresentationBean.adjMatrixRepresentation.representationEndDelimiter}"
 												 required="true">
 									</p:inputText>
 									
 									<p:outputLabel value="Matrix Row:"/>
 									<p:inputText id="delAdjMatrixRow" label="Matrix Row Delimiter"
-												 value="#{pageController.matrixRowSeparator}"
+												 value="#{graphPresentationBean.adjMatrixRepresentation.representationRowSeparator}"
 												 required="false">
 									</p:inputText>
 									
 									<p:outputLabel value="Matrix Row Elements:"/>
 									<p:inputText id="delAjdMatrixRowElem" label="Matrix Row Elements Delimiter"
-												 value="#{pageController.matrixRowElementsSeparator}"
+												 value="#{graphPresentationBean.adjMatrixRepresentation.representationRowElementsSeparator}"
 												 required="true">
 									</p:inputText>
 									
@@ -133,15 +135,15 @@
 		
 					<p:fieldset legend="Representação">
 						<h:panelGroup id="representationGroup">
-							<p:selectOneMenu id="somRepMode" value="#{pageController.graphRepresentationMode}">
-								<f:selectItems	value="#{pageController.graphRepresentationModes}"
+							<p:selectOneMenu id="somRepMode" value="#{graphPresentationBean.graphRepresentationMode}">
+								<f:selectItems	value="#{graphPresentationBean.graphRepresentationModes}"
 												var="repMode" 
 												itemLabel="#{repMode.label}"
 												itemValue="#{repMode}">
 								</f:selectItems>
 								
 								<p:ajax event="itemSelect"
-										listener="#{pageController.processChangeGraphRepresentationMode}"
+										listener="#{graphPresentationBean.processChangeGraphRepresentationMode}"
 										process="@this somRepMode"
 										update="delimitMainPanel graphRepresentation">
 								</p:ajax>
@@ -149,6 +151,7 @@
 							</p:selectOneMenu>
 							
 							<p:inputTextarea id="graphRepresentation"
+											 value="#{graphPresentationBean.textRepresentation}"
 											 autoResize="true"
 											 required="false">
 							</p:inputTextarea>
@@ -172,16 +175,20 @@
 									 type="button">
 					</p:commandButton>
 					
-					<p:commandButton id="Test" value="Test" onclick="g.addNode('node1');g.addNode('node2');g.addEdge('node1','node2');"  type="button"/>
-					<p:commandButton id="Test2" value="Test" onclick="g.addNode('node3');g.addNode('node4');g.addEdge('node2','node3');"  type="button"/>
-				
+					<p:commandButton id="Test" 
+									 value="Test" onclick=""
+									 process="@this"
+									 update="@this"
+									 type="button">
+					</p:commandButton>					
 				</p:panelGrid>
 			
 			</div>
 			
 			<div id="graphCanvasDiv" class="ui-fluid" style="border: solid 1px;"/>
-		
+			
 		</h:form>
+		
 	</h:body>
 	
 </html>

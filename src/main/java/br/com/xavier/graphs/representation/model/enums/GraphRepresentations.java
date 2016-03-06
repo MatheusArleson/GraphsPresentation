@@ -11,7 +11,7 @@ public enum GraphRepresentations {
 	private GraphRepresentations(String label) {
 		this.label = label;
 	}
-
+	
 	//XXX GETTERS
 	public String getLabel() {
 		return label;

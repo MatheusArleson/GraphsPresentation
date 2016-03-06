@@ -23,17 +23,9 @@ public abstract class AbstractEdgesListRepresentation extends AbstractRepresenta
 	//XXX OVERRIDE METHODS
 	@Override
 	public Object parse(String str){
-		updateMatrixParserDelimiters();
 		return doParse(str);
 	}
 
-	private void updateMatrixParserDelimiters() {
-//		edgeListParser.setMatrixRepresentatitionMatrixStartDelimiter(getRepresentationStartDelimiter());
-//		edgeListParser.setMatrixRepresentatitionMatrixEndDelimiter(getRepresentationEndDelimiter());
-//		edgeListParser.setMatrixRepresentationMatrixRowSeparator(getRepresentationRowSeparator());
-//		edgeListParser.setMatrixRepresentationMatrixRowElementsSeparator(getRepresentationRowElementsSeparator());
-	}
-	
 	//XXX ABSTRACT METHODS
 	public abstract Object doParse(String str);
 	

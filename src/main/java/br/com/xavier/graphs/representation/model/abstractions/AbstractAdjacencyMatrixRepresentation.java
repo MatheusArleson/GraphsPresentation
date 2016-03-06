@@ -32,15 +32,7 @@ public abstract class AbstractAdjacencyMatrixRepresentation extends AbstractRepr
 	
 	@Override
 	public AbstractSquareMatrix<Integer> parse(String str){
-		updateMatrixParserDelimiters();
 		return doParse(str);
-	}
-	
-	private void updateMatrixParserDelimiters() {
-		matrixParser.setMatrixRepresentatitionMatrixStartDelimiter(getRepresentationStartDelimiter());
-		matrixParser.setMatrixRepresentatitionMatrixEndDelimiter(getRepresentationEndDelimiter());
-		matrixParser.setMatrixRepresentationMatrixRowSeparator(getRepresentationRowSeparator());
-		matrixParser.setMatrixRepresentationMatrixRowElementsSeparator(getRepresentationRowElementsSeparator());
 	}
 	
 	//XXX ABSTRACT METHODS

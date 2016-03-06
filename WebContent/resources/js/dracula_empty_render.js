@@ -1,8 +1,6 @@
 var redraw, g, renderer, layouter, graphCanvasDivName;
 
 function initDracula(graphCanvasDiv) {
-	console.log('#> initDracula');
-	
 	graphCanvasDivName = graphCanvasDiv;
 	
 	var width = getCanvasWidth(graphCanvasDivName);

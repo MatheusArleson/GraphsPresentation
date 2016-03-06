@@ -32,6 +32,22 @@
 			$( window ).resize(function() {
 				redraw();
 			});
+			
+			function showLoading(){
+				PF('loading').show();
+			}
+			
+			function hideLoading(){
+				PF('loading').hide();
+			}
+			
+			function showUploadDialog(){
+				PF('uploadFileDialog').show();
+			}
+			
+			function hideUploadDialog(){
+				PF('uploadFileDialog').hide();
+			}
 		</h:outputScript>
 		
 	</h:head>
@@ -52,7 +68,7 @@
 							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
 							 style="border:none;">
 		
-					<p:fieldset legend="Propriedades">
+					<p:fieldset legend="Graph Properties">
 						<p:panelGrid columns="2">
 						
 							<p:selectBooleanCheckbox id="checkDirectedGraph"
@@ -84,47 +100,42 @@
 						
 					</p:fieldset>
 		
-					<p:fieldset legend="Delimitadores">
+					<p:fieldset legend="Graph Representation Delimiters">
 						<p:outputPanel id="delimitMainPanel">
 						
-							<p:outputPanel id="edgesListDelimitersPanel" rendered="#{graphPresentationBean.renderEdgeListDelimitersPanel}">
+							<p:outputPanel id="delimitersPanel">
 								<p:panelGrid columns="2">
 									
-									<p:outputLabel value="Edges List Start:"/>
-									<p:inputText id="delEdgeListStart" label="Adjacency List Start Delimiter"
-												 value="#{graphPresentationBean.edgesListRepresentation.representationStartDelimiter}"
-												 required="true">
-									</p:inputText>
-									
-									
-								</p:panelGrid>
-							</p:outputPanel>
-							
-							<p:outputPanel id="adjMatrixDelimitersPanel" rendered="#{graphPresentationBean.renderAdjacencyMatrixDelimitersPanel}">
-								<p:panelGrid columns="2">
-									
-									<p:outputLabel value="Matrix Start:"/>
+									<p:outputLabel value="Start:"/>
 									<p:inputText id="delAdjMatrixStart" label="Matrix Start Delimiter"
-												 value="#{graphPresentationBean.adjMatrixRepresentation.representationStartDelimiter}"
+												 value="#{graphPresentationBean.representationStartDelimiter}"
 												 required="true">
+										<p:ajax event="keyup" process="@this"/>
+										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
-									<p:outputLabel value="Matrix End:"/>
+									<p:outputLabel value="End:"/>
 									<p:inputText id="delAdjMatrixEnd" label="Matrix End Delimiter"
-												 value="#{graphPresentationBean.adjMatrixRepresentation.representationEndDelimiter}"
+												 value="#{graphPresentationBean.representationEndDelimiter}"
 												 required="true">
+										<p:ajax event="keyup" process="@this"/>
+										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
-									<p:outputLabel value="Matrix Row:"/>
+									<p:outputLabel value="Row:"/>
 									<p:inputText id="delAdjMatrixRow" label="Matrix Row Delimiter"
-												 value="#{graphPresentationBean.adjMatrixRepresentation.representationRowSeparator}"
+												 value="#{graphPresentationBean.representationRowSeparator}"
 												 required="false">
+										<p:ajax event="keyup" process="@this"/>
+										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
-									<p:outputLabel value="Matrix Row Elements:"/>
+									<p:outputLabel value="Row Elements:"/>
 									<p:inputText id="delAjdMatrixRowElem" label="Matrix Row Elements Delimiter"
-												 value="#{graphPresentationBean.adjMatrixRepresentation.representationRowElementsSeparator}"
+												 value="#{graphPresentationBean.representationRowElementsSeparator}"
 												 required="true">
+										<p:ajax event="keyup" process="@this"/>
+										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
 								</p:panelGrid>
@@ -133,8 +144,10 @@
 						</p:outputPanel>
 					</p:fieldset>
 		
-					<p:fieldset legend="Representação">
+					<p:fieldset legend="Graph Representation">
 						<h:panelGroup id="representationGroup">
+						
+							<p:outputLabel for="somRepMode" value="Type:"/>
 							<p:selectOneMenu id="somRepMode" value="#{graphPresentationBean.graphRepresentationMode}">
 								<f:selectItems	value="#{graphPresentationBean.graphRepresentationModes}"
 												var="repMode" 
@@ -145,16 +158,28 @@
 								<p:ajax event="itemSelect"
 										listener="#{graphPresentationBean.processChangeGraphRepresentationMode}"
 										process="@this somRepMode"
-										update="delimitMainPanel graphRepresentation">
+										update="delimitMainPanel graphRepresentationText">
 								</p:ajax>
 								
 							</p:selectOneMenu>
 							
-							<p:inputTextarea id="graphRepresentation"
+							<p:outputLabel for="graphRepresentationText" value="Text:"/>
+							<p:inputTextarea id="graphRepresentationText"
 											 value="#{graphPresentationBean.textRepresentation}"
 											 autoResize="true"
 											 required="false">
 							</p:inputTextarea>
+							
+							<p:outputLabel for="fileGraphRepresentationBtn" value="File:"/>
+							<p:commandButton 	id="fileGraphRepresentationBtn"
+												value="Choose file..."
+												actionListener="#{graphPresentationBean.clearFileUpload()}"
+												process="@this"
+												update="@this"
+												onstart="showLoading();"
+												oncomplete="hideLoading();showUploadDialog();">
+							</p:commandButton>
+							
 						</h:panelGroup>
 					</p:fieldset>
 		
@@ -168,18 +193,29 @@
 							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
 							 style="border:none;">
 					
-					<p:commandButton id="Reset" 
-									 value="Reset" onclick="redraw();"
+					<p:commandButton id="resetBtn" 
+									 value="Reset Graph" onclick="showLoading();redraw();hideLoading();"
 									 process="@this"
 									 update="@this"
 									 type="button">
 					</p:commandButton>
 					
-					<p:commandButton id="Test" 
-									 value="Test" onclick=""
+					<p:commandButton id="clearBtn" 
+									 value="Clear Graph"
 									 process="@this"
 									 update="@this"
-									 type="button">
+									 actionListener="#{graphPresentationBean.clearGraph}"
+									 onstart="showLoading();"
+									 oncomplete="hideLoading();">
+					</p:commandButton>
+					
+					<p:commandButton id="processBtn" 
+									 value="ProcessGraph"
+									 process="@form"
+									 update="@form"
+									 actionListener="#{graphPresentationBean.processGraph}"
+									 onstart="showLoading();"
+									 oncomplete="hideLoading();">
 					</p:commandButton>					
 				</p:panelGrid>
 			
@@ -187,6 +223,47 @@
 			
 			<div id="graphCanvasDiv" class="ui-fluid" style="border: solid 1px;"/>
 			
+		</h:form>
+		
+		<h:form id="loadingDialogForm">
+			<p:dialog 	id="loadingDialog" widgetVar="loading" header="Loading..."
+						width="75px" height="30px" 
+						modal="false" responsive="true" 
+						resizable="false" draggable="false"
+						minimizable="false" maximizable="false"
+						closable="false" closeOnEscape="false"
+						showEffect="clip" hideEffect="clip">
+				<h:panelGroup id="loadindPanel">
+					<div align="center">
+						<h:graphicImage library="images" name="loading.gif"/>
+					</div>
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="uploadFileDialogForm" enctype="multipart/form-data">
+			<p:dialog 	id="uploadFileDialog" widgetVar="uploadFileDialog" header="Upload File"
+						modal="true" responsive="true" 
+						resizable="false" draggable="false"
+						minimizable="false" maximizable="false"
+						closable="true" closeOnEscape="true"
+						showEffect="clip" hideEffect="clip">
+				<h:panelGroup id="uploadFilePanel">
+
+					<p:fileUpload	mode="advanced" multiple="false" auto="false"
+									value="#{graphPresentationBean.uploadedFile}" 
+									fileUploadListener="#{graphPresentationBean.fileUploadListener}"
+									update=":mainForm:graphRepresentationText"
+									label="Choose File" uploadLabel="Send" cancelLabel="Clear"
+									allowTypes="/(\.)(txt)$/" accept=".txt"
+									invalidFileMessage="Only text files are allowed. (.txt)"
+									sizeLimit="1024" invalidSizeMessage="File exceed file size limit."
+									onstart="showLoading();"
+									oncomplete="hideLoading();">
+					</p:fileUpload>
+				
+				</h:panelGroup>
+			</p:dialog>
 		</h:form>
 		
 	</h:body>

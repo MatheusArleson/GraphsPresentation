@@ -96,7 +96,20 @@ public abstract class AbstractRepresentation implements RepresentationParser, Se
 			+ ", representationRowElementsSeparator=" + representationRowElementsSeparator 
 		+ "]";
 	}
-
+	
+	@Override
+	public void updateDelimiters(
+		String representationStartDelimiter, 
+		String representationEndDelimiter, 
+		String representationRowSeparator, 
+		String representationRowElementsSeparator
+	) {
+		this.representationStartDelimiter = representationStartDelimiter;
+		this.representationEndDelimiter = representationEndDelimiter;
+		this.representationRowSeparator = representationRowSeparator;
+		this.representationRowElementsSeparator = representationRowElementsSeparator;
+	}
+	
 	//XXX GETTERS/SETTERS
 	public String getRepresentationStartDelimiter() {
 		return representationStartDelimiter;

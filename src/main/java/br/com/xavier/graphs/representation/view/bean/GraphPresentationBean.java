@@ -78,6 +78,8 @@ public class GraphPresentationBean {
 			return;
 		}
 		
+		this.textRepresentation = textRepresentation.replace("\r", "");
+		
 		graphPresentationService.processGraphScript(
 			graphProperties, 
 			graphRepresentationMode,

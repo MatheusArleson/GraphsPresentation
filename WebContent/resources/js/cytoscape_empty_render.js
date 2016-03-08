@@ -46,7 +46,8 @@ function initCy(){
 				style: {
 					'width': 4,
 					'line-color': '#CCCCCC',
-					'target-arrow-color': '#CCCCCC'
+					'target-arrow-color': '#CCCCCC',
+					'label': 'data(label)'
 				}
 			},
 			{

@@ -58,6 +58,7 @@ public class GraphPresentationService {
 			System.out.println("-------");
 			
 			PrimefacesUtil.executeJavascript(graphScript);
+			JsfUtil.addSucessMessage("Graph parsed.");
 			
 		} catch(InvalidMatrixRepresentation | InvalidMatrixRepresentationDelimiter e){
 			JsfUtil.addErrorMessage("Invalid Matrix representation. Check the text representation.");

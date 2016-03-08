@@ -19,18 +19,19 @@ import br.com.xavier.graphs.impl.simple.undirected.matrix.MatrixSUWGraph;
 import br.com.xavier.graphs.representation.model.Delimiters;
 import br.com.xavier.graphs.representation.model.GraphProperties;
 import br.com.xavier.graphs.representation.util.RandomBigDecimal;
-import br.com.xavier.matrix.impl.parser.DefaultSquareMatrixParser;
+import br.com.xavier.matrix.impl.BitSquareMatrix;
+import br.com.xavier.matrix.impl.parser.BitSquareMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
 
 @Service
 public class AdjacencyMatrixGraphRepresentationService {
 	
 	//XXX PARSER PROPERTY
-	private DefaultSquareMatrixParser<Integer> matrixParser;
+	private BitSquareMatrixParser matrixParser;
 	
 	//XXX CONSTRUCTOR
 	public AdjacencyMatrixGraphRepresentationService() {
-		this.matrixParser = new DefaultSquareMatrixParser<Integer>();
+		this.matrixParser = new BitSquareMatrixParser();
 	}
 
 	//XXX GENERATE SCRIPT METHODS
@@ -46,7 +47,7 @@ public class AdjacencyMatrixGraphRepresentationService {
 		
 		textRepresentation = matrixParser.getMatrixRepresentationStartDelimiter() + textRepresentation + matrixParser.getMatrixRepresentationEndDelimiter();
 		
-		Matrix<Integer> matrix = matrixParser.fromMatrixString(textRepresentation);
+		BitSquareMatrix matrix = (BitSquareMatrix) matrixParser.fromMatrixString(textRepresentation);
 		int numberOfNodes = matrix.getRowCount();
 		
 		NumberedNodesFactory nnf = new NumberedNodesFactory();
@@ -81,10 +82,10 @@ public class AdjacencyMatrixGraphRepresentationService {
 		ArrayList<NumberedNode> nodesList = new ArrayList<NumberedNode>(nodesSet);
 		
 		for (int row = 0; row < matrix.getRowCount(); row++) {
-			NumberedNode rowObj = nodesList.get(0);
+			NumberedNode rowObj = nodesList.get(row);
 			
 			for (int column = 0; column < matrix.getColumnCount(); column++) {
-				NumberedNode columnObj = nodesList.get(0);
+				NumberedNode columnObj = nodesList.get(column);
 				
 				Integer value = matrix.get(column, row);
 				boolean isEmpty = matrix.checkEmpty(value);
@@ -119,19 +120,16 @@ public class AdjacencyMatrixGraphRepresentationService {
 			graph.addNode(numberedNode);
 		}
 		
-		for (NumberedNode numberedNode : nodesSet) {
-			graph.addNode(numberedNode);
-		}
-		
 		ArrayList<NumberedNode> nodesList = new ArrayList<NumberedNode>(nodesSet);
 		
 		for (int row = 0; row < matrix.getRowCount(); row++) {
-			NumberedNode rowObj = nodesList.get(0);
+			NumberedNode rowObj = nodesList.get(row);
 			
 			for (int column = 0; column < matrix.getColumnCount(); column++) {
-				NumberedNode columnObj = nodesList.get(0);
+				NumberedNode columnObj = nodesList.get(column);
 				
 				Integer value = matrix.get(column, row);
+				//Integer value = matrix.get(column, row);
 				boolean isEmpty = matrix.checkEmpty(value);
 				if(!isEmpty){
 					DefaultUnweightedEdge<NumberedNode> edge = new DefaultUnweightedEdge<NumberedNode>(rowObj, columnObj);

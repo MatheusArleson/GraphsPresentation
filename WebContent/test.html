@@ -1,0 +1,145 @@
+<html>
+
+	<head>
+		<title>cytoscape-dagre.js demo</title>
+
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+		
+		<script src="cytoscape.js"></script>
+		<script src="jquery-2.2.1.js"></script>
+		<script src="dagre.js"></script>
+		<script src="cytoscape-dagre.js"></script>
+
+		<style>
+			body {
+				font-family: helvetica;
+				font-size: 14px;
+			}
+
+			#cy {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				z-index: 999;
+			}
+
+			h1 {
+				opacity: 0.5;
+				font-size: 1em;
+			}
+		</style>
+
+		<script>
+			var cy, myLayout;
+			
+			var layoutOptions = {
+				name: 'dagre',
+				fit: true, 					// whether to fit to viewport
+				padding: 30, 				// fit padding
+				avoidOverlap: true, 		// prevents node overlap, may overflow boundingBox if not enough space
+				avoidOverlapPadding: 10 	// extra spacing around nodes when avoidOverlap: true
+			}
+			
+			function redraw(){
+				myLayout = cy.makeLayout(layoutOptions);
+				myLayout.run();
+			}
+		
+			function initCy(){
+				cy = window.cy = cytoscape({
+					container: document.getElementById('cy'),
+
+					boxSelectionEnabled: false,
+					autounselectify: true,
+					
+					zoomingEnabled: true,
+					userZoomingEnabled: true,
+					panningEnabled: true,
+					userPanningEnabled: true,
+					boxSelectionEnabled: false,
+					
+					minZoom: -3,
+					maxZoom: 3,
+					wheelSensitivity: 0.5,
+					
+					style: [
+						{
+							selector: 'node',
+							style: {
+								'content': 'data(id)',
+								'text-opacity': 0.5,
+								'text-valign': 'top',
+								'text-halign': 'center',
+								'background-color': '#000000'
+							}
+						},
+						{
+							selector: 'edge',
+							style: {
+								'width': 4,
+								'line-color': '#CCCCCC',
+								'target-arrow-color': '#CCCCCC'
+							}
+						},
+						{
+							selector: 'edge.undirected',
+							style: {
+								'target-arrow-shape': 'none'
+							}
+						},
+						{
+							selector: 'edge.directed',
+							style: {
+								'target-arrow-shape': 'triangle'
+							}
+						}
+					],
+
+					elements: {
+						nodes: [],	
+						edges: []
+					}
+				});
+			}
+			
+			$( document ).ready(function() {
+				initCy();
+			});
+			
+			$( window ).resize(function() {
+				redraw();
+			});
+			
+		</script>
+		
+	</head>
+
+	<body>
+		<h1>cytoscape-dagre demo</h1>
+
+		<div id="cy"></div>
+
+	</body>
+
+</html>
+
+<!-- var node = { data: { id: 'n0' }};
+cy.add(node);
+
+var node = { data: { id: 'n1' }};
+cy.add(node);
+
+var node = { data: { id: 'n2' }};
+cy.add(node);
+
+var edge01 = ;
+var edge12 = { data: { source: 'n1', target: 'n2' }, classes: 'undirected' };
+var edge20 = { data: { source: 'n2', target: 'n0' }, classes: 'undirected' };
+
+cy.add(edge01);
+cy.add(edge12);
+cy.add(edge20);
+
+redraw(); -->

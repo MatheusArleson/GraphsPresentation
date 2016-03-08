@@ -82,20 +82,12 @@
 			<scope>provided</scope>
 		</dependency>
 		
-	
-		
 		<!-- PRIMEFACES -->
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>${primefaces.version}</version>
 		</dependency>
-		
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.primefaces.extensions</groupId> -->
-<!-- 			<artifactId>all-themes</artifactId> -->
-<!-- 			<version>1.0.8</version> -->
-<!-- 		</dependency> -->
 	
 		<!-- SPRING -->
 		<dependency>
@@ -200,7 +192,13 @@
 		<dependency>
 			<groupId>br.com.xavier</groupId>
   			<artifactId>Graphs</artifactId>
-  			<version>1.1.0</version>
+  			<version>1.2.2</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.xavier</groupId>
+  			<artifactId>GraphsCytoscapeParser</artifactId>
+  			<version>1.0.0</version>
 		</dependency>
 		
 		<dependency>

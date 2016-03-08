@@ -33,10 +33,10 @@ public class GraphPresentationBean {
 	private GraphProperties graphProperties;
 	
 	//XXX DELIMITERS PROPERTIES
-	private String representationStartDelimiter;
-	private String representationEndDelimiter;
-	private String representationRowSeparator;
-	private String representationRowElementsSeparator;
+	private String representationStartDelimiter = "1";
+	private String representationEndDelimiter = "1";
+	private String representationRowSeparator = "1";
+	private String representationRowElementsSeparator = "1";
 	
 	//XXX REPRESENTATION PROPERTIES
 	private String textRepresentation;
@@ -60,19 +60,43 @@ public class GraphPresentationBean {
 		this.graphProperties = new GraphProperties(directedGraph, weightedGraph, loopsAllowed, multipleEdgesAllowed);
 	}
 	
-	//XXX REPRESENTATION MODES METHODs
-	
-	public GraphRepresentations[] getGraphRepresentationModes(){
-		return GraphRepresentations.values();
-	}
-	
-	//XXX PRESENTATION METHODS
+	//XXX PAGE METHODS
 	public void processChangeGraphRepresentationMode(){
-		this.textRepresentation = new String();
-		this.uploadedFile = null;
+		clearTextRepresentation();
+		clearFileUpload();
 	}
 	
-	//XXX UPLOAD FILE PROPERTIES
+	public void clearGraph(){
+		setupDefaultGraphProperties();
+		clearDelimiters();
+		clearTextRepresentation();
+	}
+	
+	public void processGraph(){
+		graphPresentationService.processGraph(
+			graphProperties, 
+			graphRepresentationMode,
+			textRepresentation,
+			representationStartDelimiter,
+			representationEndDelimiter,
+			representationRowSeparator,
+			representationRowElementsSeparator
+		);
+	}
+	
+	//XXX DELIMITERS METHODS
+	private void clearDelimiters(){
+		this.representationStartDelimiter = "";
+		this.representationEndDelimiter = "";
+		this.representationRowSeparator = "";
+		this.representationRowElementsSeparator = "";
+	}
+	
+	private void clearTextRepresentation(){
+		this.textRepresentation = "";
+	}
+	
+	//XXX UPLOAD FILE METHODS
 	public void clearFileUpload(){
 		this.uploadedFile = null;
 	}
@@ -89,6 +113,12 @@ public class GraphPresentationBean {
 		
 		this.textRepresentation = fileText;
 		PrimefacesUtil.hideByWidgetVar(WV_FILE_UPLOAD_DIALOG);
+	}
+	
+	//XXX RENDERING METHODS
+	
+	public GraphRepresentations[] getGraphRepresentationModes(){
+		return GraphRepresentations.values();
 	}
 	
 	//XXX GETTERS/SETTERS

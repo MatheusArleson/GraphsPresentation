@@ -17,22 +17,21 @@
 		</style>
 		
 		<!-- GRAPH DRAWING LIB -->
-		<h:outputScript library="js" name="raphael-min.js"/>
-		<h:outputScript library="js" name="dracula_graffle.js"/>
-		<h:outputScript library="js" name="dracula_graph.js"/>
-		<h:outputScript library="js" name="dracula_graph.js"/>
-		<h:outputScript library="js" name="dracula_empty_render.js"/>
+		<h:outputScript library="js" name="cytoscape.js"/>
+		<h:outputScript library="js" name="dagre.js"/>
+		<h:outputScript library="js" name="cytoscape-dagre.js"/>
+		<h:outputScript library="js" name="cytoscape_empty_render.js"/>
 		
 		<!-- INITIALIZATION OF EMTY CONTAINER -->
 		<h:outputScript>
-			$( window ).ready(function() {
-				initDracula('graphCanvasDiv');			   
+			$( document ).ready(function() {
+				initCy();
 			});
 			
 			$( window ).resize(function() {
 				redraw();
 			});
-			
+		
 			function showLoading(){
 				PF('loading').show();
 			}
@@ -74,12 +73,14 @@
 							<p:selectBooleanCheckbox id="checkDirectedGraph"
 													 label="Directed Graph"
 													 value="#{graphPresentationBean.graphProperties.directedGraph}">
+								<p:ajax event="change" process="@this"/>
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkDirectedGraph" value="Directed"/>
 							
 							<p:selectBooleanCheckbox id="checkWeightedGraph"
 													 label="Weighted Graph"
 													 value="#{graphPresentationBean.graphProperties.weightedGraph}">
+								<p:ajax event="change" process="@this"/>
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
 							
@@ -87,6 +88,7 @@
 													 label="Loops allowed in Graph"
 													 value="#{graphPresentationBean.graphProperties.loopsAllowed}"
 													 disabled="true">
+								<p:ajax event="change" process="@this"/>
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
 							
@@ -94,6 +96,7 @@
 													 label="Multiple Edges Allowed in Graph"
 													 value="#{graphPresentationBean.graphProperties.multipleEdgesAllowed}"
 													 disabled="true">
+								<p:ajax event="change" process="@this"/>
 							</p:selectBooleanCheckbox>
 							<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
 						</p:panelGrid>
@@ -158,17 +161,10 @@
 								<p:ajax event="itemSelect"
 										listener="#{graphPresentationBean.processChangeGraphRepresentationMode}"
 										process="@this somRepMode"
-										update="delimitMainPanel graphRepresentationText">
+										update="graphRepresentationText">
 								</p:ajax>
 								
 							</p:selectOneMenu>
-							
-							<p:outputLabel for="graphRepresentationText" value="Text:"/>
-							<p:inputTextarea id="graphRepresentationText"
-											 value="#{graphPresentationBean.textRepresentation}"
-											 autoResize="true"
-											 required="false">
-							</p:inputTextarea>
 							
 							<p:outputLabel for="fileGraphRepresentationBtn" value="File:"/>
 							<p:commandButton 	id="fileGraphRepresentationBtn"
@@ -179,6 +175,13 @@
 												onstart="showLoading();"
 												oncomplete="hideLoading();showUploadDialog();">
 							</p:commandButton>
+							
+							<p:outputLabel for="graphRepresentationText" value="Text:"/>
+							<p:inputTextarea id="graphRepresentationText"
+											 value="#{graphPresentationBean.textRepresentation}"
+											 autoResize="true"
+											 required="false">
+							</p:inputTextarea>
 							
 						</h:panelGroup>
 					</p:fieldset>
@@ -194,25 +197,26 @@
 							 style="border:none;">
 					
 					<p:commandButton id="resetBtn" 
-									 value="Reset Graph" onclick="showLoading();redraw();hideLoading();"
+									 value="Reset Graph"
+									 type="button"
 									 process="@this"
-									 update="@this"
-									 type="button">
+									 update="@none"
+									 onclick="redraw();">
 					</p:commandButton>
 					
 					<p:commandButton id="clearBtn" 
-									 value="Clear Graph"
+									 value="Clear"
 									 process="@this"
-									 update="@this"
+									 update="mainForm"
 									 actionListener="#{graphPresentationBean.clearGraph}"
 									 onstart="showLoading();"
 									 oncomplete="hideLoading();">
 					</p:commandButton>
 					
 					<p:commandButton id="processBtn" 
-									 value="ProcessGraph"
+									 value="Process Graph"
 									 process="@form"
-									 update="@form"
+									 update="@none"
 									 actionListener="#{graphPresentationBean.processGraph}"
 									 onstart="showLoading();"
 									 oncomplete="hideLoading();">
@@ -221,14 +225,16 @@
 			
 			</div>
 			
-			<div id="graphCanvasDiv" class="ui-fluid" style="border: solid 1px;"/>
-			
+		</h:form>
+		
+		<h:form id="graphCanvasForm">
+			<div id="cy" class="ui-fluid" style="border: solid 1px; height: 300px;"/>
 		</h:form>
 		
 		<h:form id="loadingDialogForm">
 			<p:dialog 	id="loadingDialog" widgetVar="loading" header="Loading..."
 						width="75px" height="30px" 
-						modal="false" responsive="true" 
+						modal="true" responsive="true" position="center"
 						resizable="false" draggable="false"
 						minimizable="false" maximizable="false"
 						closable="false" closeOnEscape="false"

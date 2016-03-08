@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import br.com.xavier.graphs.representation.model.Delimiters;
 import br.com.xavier.graphs.representation.model.GraphProperties;
 import br.com.xavier.graphs.representation.model.enums.GraphRepresentations;
 import br.com.xavier.graphs.representation.service.GraphPresentationService;
@@ -33,10 +34,7 @@ public class GraphPresentationBean {
 	private GraphProperties graphProperties;
 	
 	//XXX DELIMITERS PROPERTIES
-	private String representationStartDelimiter = "1";
-	private String representationEndDelimiter = "1";
-	private String representationRowSeparator = "1";
-	private String representationRowElementsSeparator = "1";
+	private Delimiters delimiters;
 	
 	//XXX REPRESENTATION PROPERTIES
 	private String textRepresentation;
@@ -58,6 +56,8 @@ public class GraphPresentationBean {
 		
 		this.graphRepresentationMode = GraphRepresentations.ADJACENCY_MATRIX_LIST;
 		this.graphProperties = new GraphProperties(directedGraph, weightedGraph, loopsAllowed, multipleEdgesAllowed);
+		
+		clearDelimiters();
 	}
 	
 	//XXX PAGE METHODS
@@ -73,23 +73,49 @@ public class GraphPresentationBean {
 	}
 	
 	public void processGraph(){
-		graphPresentationService.processGraph(
+		boolean isDelsValid = validateDelimiters(delimiters);
+		if(!isDelsValid){
+			return;
+		}
+		
+		graphPresentationService.processGraphScript(
 			graphProperties, 
 			graphRepresentationMode,
+			"cy",
+			"cy",
 			textRepresentation,
-			representationStartDelimiter,
-			representationEndDelimiter,
-			representationRowSeparator,
-			representationRowElementsSeparator
+			delimiters
 		);
 	}
 	
 	//XXX DELIMITERS METHODS
 	private void clearDelimiters(){
-		this.representationStartDelimiter = "";
-		this.representationEndDelimiter = "";
-		this.representationRowSeparator = "";
-		this.representationRowElementsSeparator = "";
+		this.delimiters = new Delimiters("[", "]", "\n", ",");
+	}
+	
+	private boolean validateDelimiters(Delimiters delimiters){
+		if(delimiters == null){
+			JsfUtil.addErrorMessage("Delimiters are required. Please inform them.");
+			return false;
+		}
+		
+		String rowDelimiter = delimiters.getRowDelimiter();
+		if(StringUtil.isNullOrEmpty(rowDelimiter)){
+			rowDelimiter = "\n";
+			delimiters.setRowDelimiter(rowDelimiter);
+		}
+		
+		String startDelimiter = delimiters.getStartDelimiter();
+		String endDelimiter = delimiters.getEndDelimiter();
+		String rowElementsDelimiter = delimiters.getRowElementsDelimiter();
+		
+		boolean anyEmpty = StringUtil.anyNullOrEmpty(startDelimiter, endDelimiter, rowDelimiter, rowElementsDelimiter);
+		if(anyEmpty){
+			JsfUtil.addErrorMessage("Delimiters are required. Please inform them.");
+			return false;
+		}
+		
+		return true;
 	}
 	
 	private void clearTextRepresentation(){
@@ -133,36 +159,12 @@ public class GraphPresentationBean {
 	}
 	
 	//DELIMITERS PROPERTIES
-	public String getRepresentationStartDelimiter() {
-		return representationStartDelimiter;
+	public Delimiters getDelimiters() {
+		return delimiters;
 	}
 	
-	public void setRepresentationStartDelimiter(String representationStartDelimiter) {
-		this.representationStartDelimiter = representationStartDelimiter;
-	}
-	
-	public String getRepresentationEndDelimiter() {
-		return representationEndDelimiter;
-	}
-	
-	public void setRepresentationEndDelimiter(String representationEndDelimiter) {
-		this.representationEndDelimiter = representationEndDelimiter;
-	}
-	
-	public String getRepresentationRowSeparator() {
-		return representationRowSeparator;
-	}
-	
-	public void setRepresentationRowSeparator(String representationRowSeparator) {
-		this.representationRowSeparator = representationRowSeparator;
-	}
-	
-	public String getRepresentationRowElementsSeparator() {
-		return representationRowElementsSeparator;
-	}
-	
-	public void setRepresentationRowElementsSeparator(String representationRowElementsSeparator) {
-		this.representationRowElementsSeparator = representationRowElementsSeparator;
+	public void setDelimiters(Delimiters delimiters) {
+		this.delimiters = delimiters;
 	}
 	
 	//REPRESENTATIONS

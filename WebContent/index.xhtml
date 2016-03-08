@@ -110,32 +110,32 @@
 								<p:panelGrid columns="2">
 									
 									<p:outputLabel value="Start:"/>
-									<p:inputText id="delAdjMatrixStart" label="Matrix Start Delimiter"
-												 value="#{graphPresentationBean.representationStartDelimiter}"
+									<p:inputText id="delStart" label="Start Delimiter"
+												 value="#{graphPresentationBean.delimiters.startDelimiter}"
 												 required="true">
 										<p:ajax event="keyup" process="@this"/>
 										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
 									<p:outputLabel value="End:"/>
-									<p:inputText id="delAdjMatrixEnd" label="Matrix End Delimiter"
-												 value="#{graphPresentationBean.representationEndDelimiter}"
+									<p:inputText id="delEnd" label="End Delimiter"
+												 value="#{graphPresentationBean.delimiters.endDelimiter}"
 												 required="true">
 										<p:ajax event="keyup" process="@this"/>
 										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
 									<p:outputLabel value="Row:"/>
-									<p:inputText id="delAdjMatrixRow" label="Matrix Row Delimiter"
-												 value="#{graphPresentationBean.representationRowSeparator}"
+									<p:inputText id="delRow" label="Row Delimiter"
+												 value="#{graphPresentationBean.delimiters.rowDelimiter}"
 												 required="false">
 										<p:ajax event="keyup" process="@this"/>
 										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
 									<p:outputLabel value="Row Elements:"/>
-									<p:inputText id="delAjdMatrixRowElem" label="Matrix Row Elements Delimiter"
-												 value="#{graphPresentationBean.representationRowElementsSeparator}"
+									<p:inputText id="delRowElem" label="Row Elements Delimiter"
+												 value="#{graphPresentationBean.delimiters.rowElementsDelimiter}"
 												 required="true">
 										<p:ajax event="keyup" process="@this"/>
 										<p:ajax event="blur" process="@this"/>

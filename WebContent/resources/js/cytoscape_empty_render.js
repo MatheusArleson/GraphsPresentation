@@ -27,7 +27,7 @@ function initCy(){
 		userPanningEnabled: true,
 		boxSelectionEnabled: false,
 		
-		minZoom: 1,
+		minZoom: 0.5,
 		maxZoom: 3,
 		wheelSensitivity: 0.5,
 		

@@ -9,8 +9,12 @@ var layoutOptions = {
 }
 
 function redraw(){
+	cy.edges().removeClass('highlighted');
+	cy.nodes().removeClass('highlighted');
+	
 	myLayout = cy.makeLayout(layoutOptions);
 	myLayout.run();
+	
 	cy.fit();
 }
 

@@ -31,43 +31,74 @@ function initCy(){
 		maxZoom: 3,
 		wheelSensitivity: 0.5,
 		
-		style: [
+		style: cytoscape.stylesheet().selector('node').css(
 			{
-				selector: 'node',
-				style: {
-					'content': 'data(id)',
-					'text-opacity': 0.5,
-					'text-valign': 'top',
-					'text-halign': 'center',
-					'background-color': '#000000'
-				}
-			},
+				'content': 'data(id)',
+				'text-opacity': 0.5,
+				'text-valign': 'top',
+				'text-halign': 'center',
+				'background-color': '#000000'
+		 	}
+		).selector('edge') .css(
 			{
-				selector: 'edge',
-				style: {
-					'width': 4,
-					'line-color': '#CCCCCC',
-					'target-arrow-color': '#CCCCCC',
-					'label': 'data(label)'
-				}
-			},
-			{
-				selector: 'edge.undirected',
-				style: {
-					'target-arrow-shape': 'none'
-				}
-			},
-			{
-				selector: 'edge.directed',
-				style: {
-					'target-arrow-shape': 'triangle'
-				}
+				'width': 4,
+				'line-color': '#CCCCCC',
+				'target-arrow-color': '#CCCCCC',
+				'label': 'data(label)'
 			}
-		],
-
+		).selector('edge.undirected') .css(
+			{
+				'target-arrow-shape': 'none'
+			}
+		).selector('edge.directed') .css(
+			{
+				'target-arrow-shape': 'triangle'
+			}
+		).selector('.highlighted').css(
+			{
+				'background-color' : '#61bffc',
+				'line-color' : '#61bffc',
+				'target-arrow-color' : '#61bffc',
+				'transition-property' : 'background-color, line-color, target-arrow-color',
+				'transition-duration' : '0.5s'
+			}
+		),
+		
 		elements: {
 			nodes: [],	
 			edges: []
 		}
 	});
+}
+
+function doAlgorithm(algName, nodeId, isDirected){
+	
+	var nodeSelector = '#' + nodeId;
+	var alg;
+	
+	switch (algName) {
+	case 'BFS':
+		alg = cy.elements().bfs(nodeSelector, function(){}, isDirected); 
+		break;
+	case 'DFS':
+		alg = cy.elements().dfs(nodeSelector, function(){}, isDirected); 
+		break;
+	case 'DIJ':
+		break;
+	default:
+		break;
+	}
+	
+	var i = 0;
+	var highlightNextEle = function(){
+	  if( i < alg.path.length ){
+	    alg.path[i].addClass('highlighted');
+	  
+	    i++;
+	    setTimeout(highlightNextEle, 1000);
+	  }
+	};
+
+	// kick off first highlight
+	highlightNextEle();
 }

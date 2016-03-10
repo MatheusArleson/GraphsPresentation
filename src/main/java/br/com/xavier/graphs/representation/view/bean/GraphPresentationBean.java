@@ -45,6 +45,7 @@ public class GraphPresentationBean {
 	private UploadedFile weightsUploadedFile;
 	
 	private boolean isGraphParsed;
+	private boolean isAlgorithmParsed;
 	
 	//XXX ALGORITMS PROPERTIES
 	private Integer algorithmNodeNumber;
@@ -65,6 +66,7 @@ public class GraphPresentationBean {
 		boolean multipleEdgesAllowed = false;
 		
 		this.isGraphParsed = false;
+		this.isAlgorithmParsed = false;
 		
 		this.graphRepresentationMode = GraphRepresentations.ADJACENCY_MATRIX_LIST;
 		this.graphProperties = new GraphProperties(directedGraph, weightedGraph, loopsAllowed, multipleEdgesAllowed);
@@ -118,6 +120,10 @@ public class GraphPresentationBean {
 			weightsRepresentation,
 			delimiters
 		);
+		
+		if(isGraphParsed){
+			this.isAlgorithmParsed = false;
+		}
 	}
 	
 	//XXX DELIMITERS METHODS
@@ -174,7 +180,7 @@ public class GraphPresentationBean {
 	}
 	
 	public void processGraphAlgorithm(){
-		graphPresentationService.doGraphAlgorithm(graphAlgorithm, algorithmNodeNumber, graphProperties.isDirectedGraph());
+		this.isAlgorithmParsed = graphPresentationService.doGraphAlgorithm(graphAlgorithm, algorithmNodeNumber, graphProperties.isDirectedGraph(), isAlgorithmParsed);
 	}
 	
 	//XXX UPLOAD FILE METHODS

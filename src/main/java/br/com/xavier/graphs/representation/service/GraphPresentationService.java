@@ -168,7 +168,7 @@ public class GraphPresentationService {
 		}
 	}
 
-	public void doGraphAlgorithm(GraphAlgorithms graphAlgorithm, Integer algorithmNodeNumber, boolean directedGraph) {
+	public boolean doGraphAlgorithm(GraphAlgorithms graphAlgorithm, Integer algorithmNodeNumber, boolean directedGraph, boolean isAlreadyParsed) {
 		try{
 			NullChecker.checkNullParameter(graphAlgorithm, algorithmNodeNumber, directedGraph);
 			
@@ -184,17 +184,24 @@ public class GraphPresentationService {
 			System.out.println(doAlgCommand);
 			System.out.println("-------------");
 			
-			PrimefacesUtil.executeJavascript(doAlgCommand);
+			if(isAlreadyParsed){
+				String redrawCommand = "redraw();\n";
+				PrimefacesUtil.executeJavascript(redrawCommand + doAlgCommand);
+			} else {
+				PrimefacesUtil.executeJavascript(doAlgCommand);
+			}
+			
+			return true;
 		
 		} catch(IllegalNodeException e){
 			JsfUtil.addErrorMessage("Error executing Graph algorithm.");
 			JsfUtil.addErrorMessage(e.getMessage());
 			e.printStackTrace();
-			return;
+			return false;
 		} catch(Exception e){
 			JsfUtil.addErrorMessage("Error executing Graph algorithm.");
 			e.printStackTrace();
-			return;
+			return false;
 		}
 	}
 }

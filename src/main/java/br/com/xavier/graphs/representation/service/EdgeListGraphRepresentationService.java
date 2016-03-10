@@ -45,7 +45,7 @@ public class EdgeListGraphRepresentationService {
 		String rowDelimiterRegexp = Pattern.compile(delimiters.getRowDelimiter()).toString();
 		String rowElementsDelimiterRegexp = Pattern.compile(delimiters.getRowElementsDelimiter()).toString();
 		
-		validate(textRepresentation, delimiters, rowDelimiterRegexp);
+		validate(textRepresentation, delimiters, rowDelimiterRegexp, rowElementsDelimiterRegexp);
 		LinkedHashSet<NumberedNode> nodesSet = generateNodeSet(textRepresentation, delimiters, rowDelimiterRegexp, rowElementsDelimiterRegexp);
 		if(nodesSet.isEmpty()){
 			return "";
@@ -53,10 +53,28 @@ public class EdgeListGraphRepresentationService {
 		
 		Map<NumberedNode, List<NumberedNode>> graphMap = generateGraphMap(textRepresentation, delimiters, rowDelimiterRegexp, rowElementsDelimiterRegexp, nodesSet);
 		
-		if(graphProperties.isWeightedGraph()){
-			return generateWeightedEdgesListGraphScript(graphProperties, htmlElementContainer, graphWidgetVar, graphMap, weightRepresentation);
-		} else {
+		boolean isWeighted = graphProperties.isWeightedGraph();
+		if(!isWeighted){
 			return generateUnweightedEdgesListGraphScript(graphProperties, htmlElementContainer, graphWidgetVar, graphMap);
+		} else {
+			if(StringUtil.isNullOrEmpty(weightRepresentation)){
+				throw new InvalidGraphRepresentation("Empty weight representation.");
+			}
+			
+			weightRepresentation = weightRepresentation.replaceAll("\r", "");
+			
+			validate(weightRepresentation, delimiters, rowDelimiterRegexp, rowElementsDelimiterRegexp);
+			String workStr = weightRepresentation.replaceAll(rowDelimiterRegexp, rowElementsDelimiterRegexp);
+			String[] weights = workStr.split(rowElementsDelimiterRegexp);
+			
+			int numberOfWeights = weights.length;
+			int numberOfEdges = getNumberOfEdges(graphMap);
+			
+			if(numberOfEdges != numberOfWeights){
+				throw new InvalidGraphRepresentation("Number of Weights must be equal to the number of Edges.");
+			}
+			
+			return generateWeightedEdgesListGraphScript(graphProperties, htmlElementContainer, graphWidgetVar, graphMap, weights);
 		}
 	}
 
@@ -95,12 +113,12 @@ public class EdgeListGraphRepresentationService {
 		return graphMap;
 	}
 
-	private void validate(String textRepresentation, Delimiters delimiters, String rowDelimiterRegexp) {
+	private void validate(String textRepresentation, Delimiters delimiters, String rowDelimiterRegexp, String rowElementsDelimiterRegexp) {
 		String workStr = null;
 		//contains more than one line?
 		boolean containsRowDelimiter = textRepresentation.contains(delimiters.getRowDelimiter());
 		if(containsRowDelimiter){ 
-			workStr = textRepresentation.replaceAll(rowDelimiterRegexp, "");
+			workStr = textRepresentation.replaceAll(rowDelimiterRegexp, rowElementsDelimiterRegexp);
 		} else {
 			workStr = new String(textRepresentation);
 		}
@@ -132,6 +150,20 @@ public class EdgeListGraphRepresentationService {
 		return max;
 	}
 	
+	private int getNumberOfEdges(Map<NumberedNode, List<NumberedNode>> graphMap){
+		int count = 0;
+		
+		if(graphMap.isEmpty()){
+			return count;
+		}
+		
+		for (NumberedNode nodeKey : graphMap.keySet()) {
+			count += graphMap.get(nodeKey).size();
+		}
+		
+		return count;
+	}
+	
 	//XXX GENERATE SCRIPT METHODS
 	
 	private String generateWeightedEdgesListGraphScript(
@@ -139,12 +171,8 @@ public class EdgeListGraphRepresentationService {
 		String htmlElementContainer,
 		String graphWidgetVar,
 		Map<NumberedNode, List<NumberedNode>> graphMap,
-		String weightRepresentation
+		String[] weights
 	) {
-		//TODO FIXME parse weight part
-		
-		
-		
 		AbstractGraph<NumberedNode, DefaultWeightedEdge<NumberedNode, String>> graph = null;
 		
 		if(graphProperties.isDirectedGraph()){
@@ -158,6 +186,8 @@ public class EdgeListGraphRepresentationService {
 			graph.addNode(node);
 		}
 		
+		int weightCount = 0;
+		
 		for (NumberedNode node : graphMapNodesSet) {
 			List<NumberedNode> relatedNodesList = graphMap.get(node);
 			if(relatedNodesList.isEmpty()){
@@ -165,8 +195,11 @@ public class EdgeListGraphRepresentationService {
 			}
 			
 			for (NumberedNode relatedNode : relatedNodesList) {
-				DefaultWeightedEdge<NumberedNode, String> edge = new DefaultWeightedEdge<NumberedNode, String>(node, relatedNode, "0");
+				String weight = weights[weightCount];
+				DefaultWeightedEdge<NumberedNode, String> edge = new DefaultWeightedEdge<NumberedNode, String>(node, relatedNode, weight);
+				
 				graph.addEdge(edge);
+				weightCount++;
 			}
 		}
 		

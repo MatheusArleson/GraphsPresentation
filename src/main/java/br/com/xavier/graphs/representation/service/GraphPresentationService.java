@@ -78,6 +78,11 @@ public class GraphPresentationService {
 			JsfUtil.addErrorMessage("Invalid Matrix representation. Check the text representation.");
 			e.printStackTrace();
 			return;
+		} catch(InvalidGraphRepresentation e){
+			JsfUtil.addErrorMessage("Invalid Graph representation.");
+			JsfUtil.addErrorMessage(e.getMessage());
+			e.printStackTrace();
+			return;
 		} catch(Exception e){
 			JsfUtil.addErrorMessage("Error generating Graph.");
 			e.printStackTrace();

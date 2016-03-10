@@ -22,7 +22,8 @@ import br.com.xavier.jsf.PrimefacesUtil;
 @Controller
 public class GraphPresentationBean {
 	
-	private static final String WV_FILE_UPLOAD_DIALOG = "uploadFileDialog";
+	private static final String WV_GRAPH_FILE_UPLOAD_DIALOG = "graphFileUploadDialog";
+	private static final String WV_WEIGHTS_FILE_UPLOAD_DIALOG = "weightsFileUploadDialog";
 	
 	@Autowired
 	private GraphPresentationService graphPresentationService;
@@ -39,7 +40,8 @@ public class GraphPresentationBean {
 	//XXX REPRESENTATION PROPERTIES
 	private String textRepresentation;
 	private String weightsRepresentation;
-	private UploadedFile uploadedFile;
+	private UploadedFile graphUploadedFile;
+	private UploadedFile weightsUploadedFile;
 	
 	//XXX CONSTRUCTOR
 	public GraphPresentationBean() {}
@@ -64,7 +66,7 @@ public class GraphPresentationBean {
 	//XXX PAGE METHODS
 	public void processChangeGraphRepresentationMode(){
 		clearTextRepresentation();
-		clearFileUpload();
+		clearFileUploads();
 		
 		JsfUtil.addSucessMessage("Graph representation mode switched.");
 		
@@ -83,6 +85,7 @@ public class GraphPresentationBean {
 		clearDelimiters();
 		clearTextRepresentation();
 		clearWeightRepresentation();
+		clearFileUploads();
 	}
 	
 	public void processGraph(){
@@ -150,22 +153,47 @@ public class GraphPresentationBean {
 	}
 	
 	//XXX UPLOAD FILE METHODS
-	public void clearFileUpload(){
-		this.uploadedFile = null;
+	public void clearFileUploads(){
+		clearGraphUploadedFile();
+		clearWeightsUploadedFile();
+	}
+
+	public void clearGraphUploadedFile() {
+		this.graphUploadedFile = null;
 	}
 	
-	public void fileUploadListener(FileUploadEvent event){
-		this.uploadedFile = event.getFile();
-		String fileText = graphPresentationService.readFileToString(uploadedFile, Charset.defaultCharset());
+	public void graphFileUploadListener(FileUploadEvent event){
+		this.graphUploadedFile = event.getFile();
+		String fileText = graphPresentationService.readFileToString(graphUploadedFile, Charset.defaultCharset());
 		
 		if(StringUtil.isNullOrEmpty(fileText)){
 			JsfUtil.addErrorMessage("Empty file content.");
-			PrimefacesUtil.hideByWidgetVar(WV_FILE_UPLOAD_DIALOG);
+			PrimefacesUtil.hideByWidgetVar(WV_GRAPH_FILE_UPLOAD_DIALOG);
 			return;
 		}
 		
 		this.textRepresentation = fileText;
-		PrimefacesUtil.hideByWidgetVar(WV_FILE_UPLOAD_DIALOG);
+		JsfUtil.addSucessMessage("File content loaded.");
+		PrimefacesUtil.hideByWidgetVar(WV_GRAPH_FILE_UPLOAD_DIALOG);
+	}
+	
+	public void clearWeightsUploadedFile() {
+		this.weightsUploadedFile = null;
+	}
+	
+	public void weightsFileUploadListener(FileUploadEvent event){
+		this.weightsUploadedFile = event.getFile();
+		String fileText = graphPresentationService.readFileToString(weightsUploadedFile, Charset.defaultCharset());
+		
+		if(StringUtil.isNullOrEmpty(fileText)){
+			JsfUtil.addErrorMessage("Empty file content.");
+			PrimefacesUtil.hideByWidgetVar(WV_WEIGHTS_FILE_UPLOAD_DIALOG);
+			return;
+		}
+		
+		this.weightsRepresentation = fileText;
+		JsfUtil.addSucessMessage("File content loaded.");
+		PrimefacesUtil.hideByWidgetVar(WV_WEIGHTS_FILE_UPLOAD_DIALOG);
 	}
 	
 	//XXX RENDERING METHODS
@@ -226,12 +254,19 @@ public class GraphPresentationBean {
 		this.weightsRepresentation = weightsRepresentation;
 	}
 	
-	public UploadedFile getUploadedFile() {
-		return uploadedFile;
+	public UploadedFile getGraphUploadedFile() {
+		return graphUploadedFile;
 	}
 	
-	public void setUploadedFile(UploadedFile uploadedFile) {
-		this.uploadedFile = uploadedFile;
+	public void setGraphUploadedFile(UploadedFile graphUploadedFile) {
+		this.graphUploadedFile = graphUploadedFile;
 	}
 	
+	public UploadedFile getWeightsUploadedFile() {
+		return weightsUploadedFile;
+	}
+	
+	public void setWeightsUploadedFile(UploadedFile weightsUploadedFile) {
+		this.weightsUploadedFile = weightsUploadedFile;
+	}
 }

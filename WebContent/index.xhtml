@@ -40,12 +40,20 @@
 				PF('loading').hide();
 			}
 			
-			function showUploadDialog(){
-				PF('uploadFileDialog').show();
+			function showGraphFileUploadDialog(){
+				PF('graphFileUploadDialog').show();
 			}
 			
-			function hideUploadDialog(){
-				PF('uploadFileDialog').hide();
+			function hideGraphFileUploadDialog(){
+				PF('graphFileUploadDialog').hide();
+			}
+			
+			function showWeightsFileUploadDialog(){
+				PF('weightsFileUploadDialog').show();
+			}
+			
+			function hideWeightsFileUploadDialog(){
+				PF('weightsFileUploadDialog').hide();
 			}
 		</h:outputScript>
 		
@@ -183,14 +191,14 @@
 								
 								<p:spacer width="1px" height="20px"/>
 								
-								<p:outputLabel value="File:"/>
+								<p:outputLabel value="Graph File:"/>
 								<p:commandButton 	id="fileGraphRepresentationBtn"
-													value="Choose file..."
-													actionListener="#{graphPresentationBean.clearFileUpload()}"
+													value="Choose Graph file..."
+													actionListener="#{graphPresentationBean.clearGraphUploadedFile()}"
 													process="@this"
 													update="@this"
 													onstart="showLoading();"
-													oncomplete="hideLoading();showUploadDialog();">
+													oncomplete="hideLoading();showGraphFileUploadDialog();">
 								</p:commandButton>
 								
 								<p:spacer width="1px" height="20px"/>
@@ -201,6 +209,19 @@
 												 autoResize="true"
 												 required="true">
 								</p:inputTextarea>
+								
+								<p:spacer width="1px" height="20px"/>
+								
+								<p:outputLabel value="Weights File:" rendered="#{graphPresentationBean.renderWeightRepresentationInput}"/>
+								<p:commandButton 	id="fileWeightsRepresentationBtn"
+													rendered="#{graphPresentationBean.renderWeightRepresentationInput}"
+													value="Choose Weights file..."
+													actionListener="#{graphPresentationBean.clearWeightsUploadedFile()}"
+													process="@this"
+													update="@this"
+													onstart="showLoading();"
+													oncomplete="hideLoading();showWeightsFileUploadDialog();">
+								</p:commandButton>
 								
 								<p:spacer width="1px" height="20px"/>
 								
@@ -278,19 +299,44 @@
 			</p:dialog>
 		</h:form>
 		
-		<h:form id="uploadFileDialogForm" enctype="multipart/form-data">
-			<p:dialog 	id="uploadFileDialog" widgetVar="uploadFileDialog" header="Upload File"
+		<h:form id="uploadGraphFileDialogForm" enctype="multipart/form-data">
+			<p:dialog 	id="uploadGraphFileDialog" widgetVar="graphFileUploadDialog" header="Upload Graph File"
 						modal="true" responsive="true" 
 						resizable="false" draggable="false"
 						minimizable="false" maximizable="false"
 						closable="true" closeOnEscape="true"
 						showEffect="clip" hideEffect="clip">
-				<h:panelGroup id="uploadFilePanel">
+				<h:panelGroup id="uploadGraphFilePanel">
 
 					<p:fileUpload	mode="advanced" multiple="false" auto="false"
-									value="#{graphPresentationBean.uploadedFile}" 
-									fileUploadListener="#{graphPresentationBean.fileUploadListener}"
+									value="#{graphPresentationBean.graphUploadedFile}" 
+									fileUploadListener="#{graphPresentationBean.graphFileUploadListener}"
 									update=":mainForm:graphRepresentationText"
+									label="Choose File" uploadLabel="Send" cancelLabel="Clear"
+									allowTypes="/(\.)(txt)$/" accept=".txt"
+									invalidFileMessage="Only text files are allowed. (.txt)"
+									sizeLimit="1024" invalidSizeMessage="File exceed file size limit."
+									onstart="showLoading();"
+									oncomplete="hideLoading();">
+					</p:fileUpload>
+				
+				</h:panelGroup>
+			</p:dialog>
+		</h:form>
+		
+		<h:form id="uploadWeightsFileDialogForm" enctype="multipart/form-data">
+			<p:dialog 	id="uploadWeightsFileDialog" widgetVar="weightsFileUploadDialog" header="Upload Weights File"
+						modal="true" responsive="true" 
+						resizable="false" draggable="false"
+						minimizable="false" maximizable="false"
+						closable="true" closeOnEscape="true"
+						showEffect="clip" hideEffect="clip">
+				<h:panelGroup id="uploadWeightsFilePanel">
+
+					<p:fileUpload	mode="advanced" multiple="false" auto="false"
+									value="#{graphPresentationBean.weightsUploadedFile}" 
+									fileUploadListener="#{graphPresentationBean.weightsFileUploadListener}"
+									update=":mainForm:weightsRepresentationText"
 									label="Choose File" uploadLabel="Send" cancelLabel="Clear"
 									allowTypes="/(\.)(txt)$/" accept=".txt"
 									invalidFileMessage="Only text files are allowed. (.txt)"

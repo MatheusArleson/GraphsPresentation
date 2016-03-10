@@ -6,9 +6,11 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.xavier.graphs.exception.IllegalNodeException;
 import br.com.xavier.graphs.representation.exceptions.InvalidGraphRepresentation;
 import br.com.xavier.graphs.representation.model.Delimiters;
 import br.com.xavier.graphs.representation.model.GraphProperties;
+import br.com.xavier.graphs.representation.model.enums.GraphAlgorithms;
 import br.com.xavier.graphs.representation.model.enums.GraphRepresentations;
 import br.com.xavier.graphs.representation.util.StringUtil;
 import br.com.xavier.graphs.representation.util.checkers.GraphRepresentationChecker;
@@ -20,6 +22,8 @@ import br.com.xavier.matrix.exception.InvalidMatrixRepresentationDelimiter;
 
 @Service
 public class GraphPresentationService {
+	
+	private static final String GRAPH_ALGORITM_COMMAND_BASE_STR = "doAlgorithm('#1', #2, #3);";
 	
 	@Autowired
 	private AdjacencyMatrixGraphRepresentationService adjacencyMatrixGraphRepresentationService;
@@ -160,6 +164,36 @@ public class GraphPresentationService {
 		default:
 			GraphRepresentationChecker.handleUnkwonGraphRepresentation();
 			return null;
+		}
+	}
+
+	public void doGraphAlgorithm(GraphAlgorithms graphAlgorithm, Integer algorithmNodeNumber, boolean directedGraph) {
+		try{
+			NullChecker.checkNullParameter(graphAlgorithm, algorithmNodeNumber, directedGraph);
+			
+			if(algorithmNodeNumber < 1){
+				throw new IllegalNodeException("Node number must be equal or greater than one.");
+			}
+			
+			String nodeNumberStr = String.valueOf(algorithmNodeNumber);
+			String isDirectedStr = String.valueOf(directedGraph);
+			String doAlgCommand = GRAPH_ALGORITM_COMMAND_BASE_STR.replace("#1", graphAlgorithm.getLabel()).replace("#2", nodeNumberStr).replace("#3", isDirectedStr);
+			
+			System.out.println("-------------");
+			System.out.println(doAlgCommand);
+			System.out.println("-------------");
+			
+			PrimefacesUtil.executeJavascript(doAlgCommand);
+		
+		} catch(IllegalNodeException e){
+			JsfUtil.addErrorMessage("Error executing Graph algorithm.");
+			JsfUtil.addErrorMessage(e.getMessage());
+			e.printStackTrace();
+			return;
+		} catch(Exception e){
+			JsfUtil.addErrorMessage("Error executing Graph algorithm.");
+			e.printStackTrace();
+			return;
 		}
 	}
 }

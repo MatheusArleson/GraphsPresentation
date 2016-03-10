@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 
 import br.com.xavier.graphs.representation.model.Delimiters;
 import br.com.xavier.graphs.representation.model.GraphProperties;
+import br.com.xavier.graphs.representation.model.enums.GraphAlgorithms;
 import br.com.xavier.graphs.representation.model.enums.GraphRepresentations;
 import br.com.xavier.graphs.representation.service.GraphPresentationService;
 import br.com.xavier.graphs.representation.util.StringUtil;
@@ -43,6 +44,10 @@ public class GraphPresentationBean {
 	private UploadedFile graphUploadedFile;
 	private UploadedFile weightsUploadedFile;
 	
+	//XXX ALGORITMS PROPERTIES
+	private Integer algorithmNodeNumber;
+	private GraphAlgorithms graphAlgorithm;
+	
 	//XXX CONSTRUCTOR
 	public GraphPresentationBean() {}
 	
@@ -61,6 +66,9 @@ public class GraphPresentationBean {
 		this.graphProperties = new GraphProperties(directedGraph, weightedGraph, loopsAllowed, multipleEdgesAllowed);
 		
 		clearDelimiters();
+		
+		this.graphAlgorithm = GraphAlgorithms.BFS;
+		clearAlgorithmNodeNumber();
 	}
 	
 	//XXX PAGE METHODS
@@ -86,6 +94,7 @@ public class GraphPresentationBean {
 		clearTextRepresentation();
 		clearWeightRepresentation();
 		clearFileUploads();
+		clearAlgorithmNodeNumber();
 	}
 	
 	public void processGraph(){
@@ -106,7 +115,6 @@ public class GraphPresentationBean {
 			delimiters
 		);
 	}
-	
 	
 	//XXX DELIMITERS METHODS
 	private void clearDelimiters(){
@@ -150,6 +158,19 @@ public class GraphPresentationBean {
 	
 	private void clearWeightRepresentation(){
 		this.weightsRepresentation = "";
+	}
+	
+	//XXX ALGORITHMS METHODS
+	public void clearAlgorithmNodeNumber(){
+		this.algorithmNodeNumber = null;
+	}
+	
+	public void processChangeGraphAlgorithm(){
+		System.out.println("");
+	}
+	
+	public void processGraphAlgorithm(){
+		graphPresentationService.doGraphAlgorithm(graphAlgorithm, algorithmNodeNumber, graphProperties.isDirectedGraph());
 	}
 	
 	//XXX UPLOAD FILE METHODS
@@ -207,6 +228,10 @@ public class GraphPresentationBean {
 		
 		return isEdgeListMode && isWeighted;
 	} 
+	
+	public GraphAlgorithms[] getGraphAlgorithms(){
+		return GraphAlgorithms.values();
+	}
 	
 	//XXX GETTERS/SETTERS
 	
@@ -268,5 +293,22 @@ public class GraphPresentationBean {
 	
 	public void setWeightsUploadedFile(UploadedFile weightsUploadedFile) {
 		this.weightsUploadedFile = weightsUploadedFile;
+	}
+
+	//XXX ALGORITMS PROPERTIES
+	public Integer getAlgorithmNodeNumber() {
+		return algorithmNodeNumber;
+	}
+	
+	public void setAlgorithmNodeNumber(Integer algorithmNodeNumber) {
+		this.algorithmNodeNumber = algorithmNodeNumber;
+	}
+	
+	public GraphAlgorithms getGraphAlgorithm() {
+		return graphAlgorithm;
+	}
+	
+	public void setGraphAlgorithm(GraphAlgorithms graphAlgorithm) {
+		this.graphAlgorithm = graphAlgorithm;
 	}
 }

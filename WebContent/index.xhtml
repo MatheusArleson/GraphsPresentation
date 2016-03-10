@@ -71,8 +71,8 @@
 		
 			<div id="dataDiv" class="ui-fluid">
 		
-				<p:panelGrid id="configGrid" layout="grid" columns="2"
-							 columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank"
+				<p:panelGrid id="configGrid" layout="grid" columns="3"
+							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
 							 style="border:none;">
 					
 					<h:panelGroup id="graphPropPanel">
@@ -236,6 +236,50 @@
 							</h:panelGroup>
 						</p:fieldset>
 					
+					</h:panelGroup>
+					
+					<h:panelGroup id="graphAlgsPanel">
+						
+						<p:fieldset legend="Graph Algorithms">
+							<p:outputPanel id="algsPanel">
+								<p:panelGrid columns="2">
+									
+									<p:outputLabel value="Node number:"/>
+									<p:inputText id="algNodeNumber"
+												 value="#{graphPresentationBean.algorithmNodeNumber}">
+									</p:inputText>
+									
+									<p:outputLabel value="Algorithm:"/>
+									<p:selectOneMenu id="somAlg" value="#{graphPresentationBean.graphAlgorithm}">
+										<f:selectItems	value="#{graphPresentationBean.graphAlgorithms}"
+														var="graphAlg" 
+														itemLabel="#{graphAlg.label}"
+														itemValue="#{graphAlg}">
+										</f:selectItems>
+										
+										<p:ajax event="itemSelect"
+												listener="#{graphPresentationBean.processChangeGraphAlgorithm}"
+												process="@this algNodeNumber"
+												update="@none"
+												onstart="showLoading();"
+										 		oncomplete="hideLoading();">
+										</p:ajax>
+									
+									</p:selectOneMenu>
+									
+									<p:commandButton id="doAlgBtn" 
+													 value="Process Algorithm"
+													 process="@this algNodeNumber somAlg"
+													 update="@none"
+													 actionListener="#{graphPresentationBean.processGraphAlgorithm}"
+													 onstart="showLoading();"
+													 oncomplete="hideLoading();">
+									</p:commandButton>	
+							
+								</p:panelGrid>
+							</p:outputPanel>
+						</p:fieldset>
+						
 					</h:panelGroup>
 					
 				</p:panelGrid>

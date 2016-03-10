@@ -40,7 +40,7 @@ public class GraphPresentationService {
 	}
 	
 	//XXX PROCESS GRAPH SCRIPT METHODS
-	public void processGraphScript(
+	public boolean processGraphScript(
 		GraphProperties graphProperties, 
 		GraphRepresentations graphRepresentationMode,
 		String htmlElementContainer,
@@ -77,20 +77,21 @@ public class GraphPresentationService {
 			
 			PrimefacesUtil.executeJavascript(graphScript);
 			JsfUtil.addSucessMessage("Graph parsed.");
+			return true;
 			
 		} catch(InvalidMatrixRepresentation | InvalidMatrixRepresentationDelimiter e){
 			JsfUtil.addErrorMessage("Invalid Matrix representation. Check the text representation.");
 			e.printStackTrace();
-			return;
+			return false;
 		} catch(InvalidGraphRepresentation e){
 			JsfUtil.addErrorMessage("Invalid Graph representation.");
 			JsfUtil.addErrorMessage(e.getMessage());
 			e.printStackTrace();
-			return;
+			return false;
 		} catch(Exception e){
 			JsfUtil.addErrorMessage("Error generating Graph.");
 			e.printStackTrace();
-			return;
+			return false;
 		}
 	}
 

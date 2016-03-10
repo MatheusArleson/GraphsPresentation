@@ -246,11 +246,13 @@
 									
 									<p:outputLabel value="Node number:"/>
 									<p:inputText id="algNodeNumber"
-												 value="#{graphPresentationBean.algorithmNodeNumber}">
+												 value="#{graphPresentationBean.algorithmNodeNumber}"
+												 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}">
 									</p:inputText>
 									
 									<p:outputLabel value="Algorithm:"/>
-									<p:selectOneMenu id="somAlg" value="#{graphPresentationBean.graphAlgorithm}">
+									<p:selectOneMenu id="somAlg" value="#{graphPresentationBean.graphAlgorithm}"
+													 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}">
 										<f:selectItems	value="#{graphPresentationBean.graphAlgorithms}"
 														var="graphAlg" 
 														itemLabel="#{graphAlg.label}"
@@ -269,9 +271,10 @@
 									
 									<p:commandButton id="doAlgBtn" 
 													 value="Process Algorithm"
+													 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}"
+													 actionListener="#{graphPresentationBean.processGraphAlgorithm}"
 													 process="@this algNodeNumber somAlg"
 													 update="@none"
-													 actionListener="#{graphPresentationBean.processGraphAlgorithm}"
 													 onstart="showLoading();"
 													 oncomplete="hideLoading();">
 									</p:commandButton>	
@@ -312,7 +315,7 @@
 					<p:commandButton id="processBtn" 
 									 value="Process Graph"
 									 process="@form"
-									 update="@none"
+									 update="algsPanel"
 									 actionListener="#{graphPresentationBean.processGraph}"
 									 onstart="showLoading();"
 									 oncomplete="hideLoading();">

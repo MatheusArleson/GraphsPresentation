@@ -44,6 +44,8 @@ public class GraphPresentationBean {
 	private UploadedFile graphUploadedFile;
 	private UploadedFile weightsUploadedFile;
 	
+	private boolean isGraphParsed;
+	
 	//XXX ALGORITMS PROPERTIES
 	private Integer algorithmNodeNumber;
 	private GraphAlgorithms graphAlgorithm;
@@ -61,6 +63,8 @@ public class GraphPresentationBean {
 		boolean weightedGraph = false;
 		boolean loopsAllowed = false;
 		boolean multipleEdgesAllowed = false;
+		
+		this.isGraphParsed = false;
 		
 		this.graphRepresentationMode = GraphRepresentations.ADJACENCY_MATRIX_LIST;
 		this.graphProperties = new GraphProperties(directedGraph, weightedGraph, loopsAllowed, multipleEdgesAllowed);
@@ -105,7 +109,7 @@ public class GraphPresentationBean {
 		
 		this.textRepresentation = textRepresentation.replace("\r", "");
 		
-		graphPresentationService.processGraphScript(
+		this.isGraphParsed = graphPresentationService.processGraphScript(
 			graphProperties, 
 			graphRepresentationMode,
 			"cy",
@@ -233,6 +237,10 @@ public class GraphPresentationBean {
 		return GraphAlgorithms.values();
 	}
 	
+	public boolean isCanDoGraphAlgorithmns(){
+		return isGraphParsed;
+	}
+	
 	//XXX GETTERS/SETTERS
 	
 	//GRAPH PROPERTIES
@@ -295,6 +303,14 @@ public class GraphPresentationBean {
 		this.weightsUploadedFile = weightsUploadedFile;
 	}
 
+	public boolean isGraphParsed() {
+		return isGraphParsed;
+	}
+	
+	public void setGraphParsed(boolean isGraphParsed) {
+		this.isGraphParsed = isGraphParsed;
+	}
+	
 	//XXX ALGORITMS PROPERTIES
 	public Integer getAlgorithmNodeNumber() {
 		return algorithmNodeNumber;

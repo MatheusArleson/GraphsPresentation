@@ -74,6 +74,11 @@
  		<servlet-name>Faces Servlet</servlet-name>
 	</filter-mapping>
 	
+	<context-param>  
+    	<param-name>primefaces.THEME</param-name>  
+    	<param-value>afterwork</param-value>  
+	</context-param>  
+	
 	<!-- ERROR HANDLING -->
 	
 	<error-page>

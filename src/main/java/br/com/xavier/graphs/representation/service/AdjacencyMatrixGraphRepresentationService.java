@@ -34,7 +34,7 @@ public class AdjacencyMatrixGraphRepresentationService {
 	public AdjacencyMatrixGraphRepresentationService() {
 		this.matrixParser = new DefaultSquareMatrixParser<String>();
 		prefix = matrixParser.getMatrixRepresentationStartDelimiter() + matrixParser.getMatrixRepresentationMatrixStartDelimiter();
-		suffix = matrixParser.getMatrixRepresentationEndDelimiter() + matrixParser.getMatrixRepresentationMatrixEndDelimiter();
+		suffix = matrixParser.getMatrixRepresentationMatrixEndDelimiter() + matrixParser.getMatrixRepresentationEndDelimiter();
 	}
 
 	//XXX GENERATE SCRIPT METHODS

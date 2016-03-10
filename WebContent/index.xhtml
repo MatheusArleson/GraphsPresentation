@@ -96,23 +96,24 @@
 														 value="#{graphPresentationBean.graphProperties.directedGraph}">
 									<p:ajax event="change" 
 											process="@this"
+											update=":tooltipsForm:tpPanel"
 											onstart="showLoading();"
 									 		oncomplete="hideLoading();">
 									 </p:ajax>
 								</p:selectBooleanCheckbox>
-								<p:outputLabel for="checkDirectedGraph" value="Directed"/>
+								<p:outputLabel id="lblDirected" for="checkDirectedGraph" value="Directed"/>
 								
 								<p:selectBooleanCheckbox id="checkWeightedGraph"
 														 label="Weighted Graph"
 														 value="#{graphPresentationBean.graphProperties.weightedGraph}">
 									<p:ajax event="change" 
 											process="@this" 
-											update="graphRepPanel"
+											update="graphRepPanel :tooltipsForm:tpPanel"
 											onstart="showLoading();"
 									 		oncomplete="hideLoading();">
 									 </p:ajax>
 								</p:selectBooleanCheckbox>
-								<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
+								<p:outputLabel id="lblWeighted" for="checkWeightedGraph" value="Weighted"/>
 								
 								<p:selectBooleanCheckbox id="checkLoopsGraph"
 														 label="Loops allowed in Graph"
@@ -120,11 +121,12 @@
 														 disabled="true">
 									<p:ajax event="change" 
 											process="@this"
+											update=":tooltipsForm:tpPanel"
 											onstart="showLoading();"
 									 		oncomplete="hideLoading();">
 									 </p:ajax>
 								</p:selectBooleanCheckbox>
-								<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
+								<p:outputLabel id="lblLoops" for="checkLoopsGraph" value="Loops Allowed"/>
 								
 								<p:selectBooleanCheckbox id="checkMultipleEdgesGraph"
 														 label="Multiple Edges Allowed in Graph"
@@ -132,11 +134,12 @@
 														 disabled="true">
 									<p:ajax event="change" 
 											process="@this"
+											update=":tooltipsForm:tpPanel"
 											onstart="showLoading();"
 									 		oncomplete="hideLoading();">
 									 </p:ajax>
 								</p:selectBooleanCheckbox>
-								<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
+								<p:outputLabel id="lblMultipleEdges" for="checkMultipleEdgesGraph" value="Multiple Edges"/>
 								
 							</p:panelGrid>
 						</p:fieldset>
@@ -147,28 +150,28 @@
 							<p:outputPanel id="delimitersPanel">
 								<p:panelGrid columns="2">
 									
-									<p:outputLabel value="Row:"/>
+									<p:outputLabel id="lblDelRow" value="Row:"/>
 									<p:inputText id="delRow" label="Row Delimiter"
 												 value="#{graphPresentationBean.delimiters.rowDelimiter}"
 												 required="false">
-										<p:ajax event="keyup" process="@this"/>
-										<p:ajax event="blur" process="@this"/>
+										<p:ajax event="keyup" process="@this" update=":tooltipsForm:tpPanel"/>
+										<p:ajax event="blur" process="@this" update=":tooltipsForm:tpPanel"/>
 									</p:inputText>
 									
-									<p:outputLabel value="Row Elements:*"/>
+									<p:outputLabel id="lblDelRowElem" value="Row Elements:*"/>
 									<p:inputText id="delRowElem" label="Row Elements Delimiter"
 												 value="#{graphPresentationBean.delimiters.rowElementsDelimiter}"
 												 required="true">
-										<p:ajax event="keyup" process="@this"/>
-										<p:ajax event="blur" process="@this"/>
+										<p:ajax event="keyup" process="@this" update=":tooltipsForm:tpPanel"/>
+										<p:ajax event="blur" process="@this" update=":tooltipsForm:tpPanel"/>
 									</p:inputText>
 									
-									<p:outputLabel value="Represents Empty:*"/>
+									<p:outputLabel id="lblRepEmpty" value="Represents Empty:*"/>
 									<p:inputText id="delRepEmpty" label="Represents Empty Delimiter"
 												 value="#{graphPresentationBean.delimiters.representsEmpty}"
 												 required="true">
-										<p:ajax event="keyup" process="@this"/>
-										<p:ajax event="blur" process="@this"/>
+										<p:ajax event="keyup" process="@this" update=":tooltipsForm:tpPanel"/>
+										<p:ajax event="blur" process="@this" update=":tooltipsForm:tpPanel"/>
 									</p:inputText>
 									
 								</p:panelGrid>
@@ -182,7 +185,7 @@
 						<p:fieldset legend="Graph Representation">
 							<h:panelGroup id="representationGroup">
 							
-								<p:outputLabel for="somRepMode" value="Type:"/>
+								<p:outputLabel id="lblSomRepMode" for="somRepMode" value="Type:"/>
 								<p:selectOneMenu id="somRepMode" value="#{graphPresentationBean.graphRepresentationMode}">
 									<f:selectItems	value="#{graphPresentationBean.graphRepresentationModes}"
 													var="repMode" 
@@ -193,7 +196,7 @@
 									<p:ajax event="itemSelect"
 											listener="#{graphPresentationBean.processChangeGraphRepresentationMode}"
 											process="@this somRepMode"
-											update="graphRepPanel"
+											update="graphRepPanel :tooltipsForm:tpPanel"
 											onstart="showLoading();"
 									 		oncomplete="hideLoading();">
 									</p:ajax>
@@ -202,19 +205,19 @@
 								
 								<p:spacer width="1px" height="20px"/>
 								
-								<p:outputLabel value="Graph File:"/>
+								<p:outputLabel id="lblFileGraph" value="Graph File:"/>
 								<p:commandButton 	id="fileGraphRepresentationBtn"
 													value="Choose Graph file..."
 													actionListener="#{graphPresentationBean.clearGraphUploadedFile()}"
 													process="@this"
-													update="@this"
+													update="@this :tooltipsForm:tpPanel"
 													onstart="showLoading();"
 													oncomplete="hideLoading();showGraphFileUploadDialog();">
 								</p:commandButton>
 								
 								<p:spacer width="1px" height="20px"/>
 								
-								<p:outputLabel value="Graph:"/>
+								<p:outputLabel id="lblGraphRepText" value="Graph:"/>
 								<p:inputTextarea id="graphRepresentationText" label="Graph representation text"
 												 value="#{graphPresentationBean.textRepresentation}"
 												 autoResize="true"
@@ -223,20 +226,20 @@
 								
 								<p:spacer width="1px" height="20px"/>
 								
-								<p:outputLabel value="Weights File:" rendered="#{graphPresentationBean.renderWeightRepresentationInput}"/>
+								<p:outputLabel id="lblFileWeights" value="Weights File:" rendered="#{graphPresentationBean.renderWeightRepresentationInput}"/>
 								<p:commandButton 	id="fileWeightsRepresentationBtn"
 													rendered="#{graphPresentationBean.renderWeightRepresentationInput}"
 													value="Choose Weights file..."
 													actionListener="#{graphPresentationBean.clearWeightsUploadedFile()}"
 													process="@this"
-													update="@this"
+													update="@this :tooltipsForm:tpPanel"
 													onstart="showLoading();"
 													oncomplete="hideLoading();showWeightsFileUploadDialog();">
 								</p:commandButton>
 								
 								<p:spacer width="1px" height="20px"/>
 								
-								<p:outputLabel value="Weights:" rendered="#{graphPresentationBean.renderWeightRepresentationInput}"/>
+								<p:outputLabel id="lblWeightsRepText" value="Weights:" rendered="#{graphPresentationBean.renderWeightRepresentationInput}"/>
 								<p:inputTextarea id="weightsRepresentationText" label="Edges weight representation text"
 												 rendered="#{graphPresentationBean.renderWeightRepresentationInput}"
 												 value="#{graphPresentationBean.weightsRepresentation}"
@@ -255,13 +258,13 @@
 							<p:outputPanel id="algsPanel">
 								<p:panelGrid columns="2">
 									
-									<p:outputLabel value="Node number:"/>
+									<p:outputLabel id="lblAlgNodeNumber" value="Node number:"/>
 									<p:inputText id="algNodeNumber"
 												 value="#{graphPresentationBean.algorithmNodeNumber}"
 												 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}">
 									</p:inputText>
 									
-									<p:outputLabel value="Algorithm:"/>
+									<p:outputLabel id="lblSomAlg" value="Algorithm:"/>
 									<p:selectOneMenu id="somAlg" value="#{graphPresentationBean.graphAlgorithm}"
 													 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}">
 										<f:selectItems	value="#{graphPresentationBean.graphAlgorithms}"
@@ -273,7 +276,7 @@
 										<p:ajax event="itemSelect"
 												listener="#{graphPresentationBean.processChangeGraphAlgorithm}"
 												process="@this algNodeNumber"
-												update="@none"
+												update=":tooltipsForm:tpPanel"
 												onstart="showLoading();"
 										 		oncomplete="hideLoading();">
 										</p:ajax>
@@ -285,7 +288,7 @@
 													 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}"
 													 actionListener="#{graphPresentationBean.processGraphAlgorithm}"
 													 process="@this algNodeNumber somAlg"
-													 update="@none"
+													 update=":tooltipsForm:tpPanel"
 													 onstart="showLoading();"
 													 oncomplete="hideLoading();">
 									</p:commandButton>	
@@ -310,14 +313,14 @@
 									 value="Reset Graph"
 									 type="button"
 									 process="@this"
-									 update="@none"
+									 update=":tooltipsForm:tpPanel"
 									 onclick="redraw();">
 					</p:commandButton>
 					
 					<p:commandButton id="clearBtn" 
 									 value="Clear"
 									 process="@this"
-									 update="mainForm"
+									 update="mainForm :tooltipsForm:tpPanel"
 									 actionListener="#{graphPresentationBean.clearGraph}"
 									 onstart="showLoading();"
 									 oncomplete="hideLoading();">
@@ -326,7 +329,7 @@
 					<p:commandButton id="processBtn" 
 									 value="Process Graph"
 									 process="@form"
-									 update="algsPanel"
+									 update="algsPanel :tooltipsForm:tpPanel"
 									 actionListener="#{graphPresentationBean.processGraph}"
 									 onstart="showLoading();"
 									 oncomplete="hideLoading();">
@@ -405,6 +408,48 @@
 				
 				</h:panelGroup>
 			</p:dialog>
+		</h:form>
+		
+		<h:form id="tooltipsForm">
+			<h:panelGroup id="tpPanel">
+			
+				<p:tooltip id="tpDirect" for=":mainForm:checkDirectedGraph :mainForm:lblDirected" trackMouse="true" showDelay="850" value="Turn the Graph in [On] Directed \ [Off] Undirected."/>
+				<p:tooltip id="tpWeight" for=":mainForm:checkWeightedGraph :mainForm:lblWeighted" trackMouse="true" showDelay="850" value="Turn the Edges of the Graph in [On] Weighted \ [Off] Uweighted."/>
+				<p:tooltip id="tpLoops" for=":mainForm:checkLoopsGraph :mainForm:lblLoops" trackMouse="true" showDelay="850" value="Turn Looped Edges in the Graph [On] Allowed \ [Off] Not Allowed. Looped Edges is not yet implemented :D."/>
+				<p:tooltip id="tpMultipleEdges" for=":mainForm:checkMultipleEdgesGraph :mainForm:lblMultipleEdges" trackMouse="true" showDelay="850" value="Turn Multiple Edges in the Graph [On] Allowed \ [Off] Not Allowed. Multiple Edges is not yet implemented :D."/>
+				
+				<p:tooltip id="tpRowDel" for=":mainForm:delRow :mainForm:lblDelRow" trackMouse="true" showDelay="850" value="Represents the end of an row in the text representation. &#10; (Leave this field empty means break line aka ENTER key)." escape="false" style="white-space:pre-line;"/>
+				<p:tooltip id="tpRowDelRowElem" for=":mainForm:delRowElem :mainForm:lblDelRowElem" trackMouse="true" showDelay="850" value="Represents the separator between two elements in the text representation."/>
+				<p:tooltip id="tpRowRepEmpty" for=":mainForm:delRepEmpty :mainForm:lblRepEmpty" trackMouse="true" showDelay="850" value="Represents a empty value in the text representation." />
+				
+				<p:tooltip id="tpSomRepMode" for=":mainForm:somRepMode :mainForm:lblSomRepMode" trackMouse="true" showDelay="850" value="Define the Type of Graph representation that the text is based."/>
+				
+				<p:tooltip id="tpGraphFileUp" for=":mainForm:fileGraphRepresentationBtn :mainForm:lblFileGraph" trackMouse="true" showDelay="850" value="Loads a Graph representation text from a file."/>
+				<p:tooltip id="tpGraphRepText" for=":mainForm:graphRepresentationText :mainForm:lblGraphRepText" trackMouse="true" showDelay="850" 
+						   value="Text that represents the Graph to be created. &#10; 
+						   		  Here write a text that use the delimiters. &#10;
+						   		  A line will be the text till the row delimiter. &#10;
+						   		  A element will be delimited on one line by the row elements delimiter. &#10;
+						   		  Any empty element must be represented by the empty delimiter. 
+						   		  &#10;&#10; 
+						   		  Example: 
+						   		  &#10;&#10; 
+						   		  #{graphPresentationBean.graphTextHelp}"
+						   		  escape="false" style="white-space:pre-line;"/>
+				
+				<p:tooltip id="tpWeightsFileUp" for=":mainForm:fileWeightsRepresentationBtn :mainForm:lblFileWeights" trackMouse="true" showDelay="850" value="Loads a Graph Edges Weights representation text from a file."/>
+				<p:tooltip id="tpWeightsRepText" for=":mainForm:lblWeightsRepText :mainForm:lblWeightsRepText" trackMouse="true" showDelay="850" value="Text that represents the Graph Edges Weights to be created."/>
+				
+				<p:tooltip id="tpAlgNodeNumber" for=":mainForm:algNodeNumber :mainForm:lblAlgNodeNumber" trackMouse="true" showDelay="850" value="Number of the Node to apply the algorithm."/>
+				<p:tooltip id="tpAlg" for=":mainForm:somAlg :mainForm:lblSomAlg" trackMouse="true" showDelay="850" value="Algorithm to apply on the Graph."/>
+				<p:tooltip id="tpAlgBtn" for=":mainForm:doAlgBtn" trackMouse="true" showDelay="850" value="Apply algorithm on the Graph."/>
+				
+				<p:tooltip id="tpResetBtn" for=":mainForm:resetBtn" trackMouse="true" showDelay="850" value="Resets the Graph view to initial state."/>
+				<p:tooltip id="tpClearBtn" for=":mainForm:clearBtn" trackMouse="true" showDelay="850" value="Clear all fields to start a new Graph, but preserves the current view."/>
+				<p:tooltip id="tpProcessBtn" for=":mainForm:processBtn" trackMouse="true" showDelay="850" value="Process the fields to generate a new Graph and view."/>
+				
+			</h:panelGroup>
+			
 		</h:form>
 		
 	</h:body>

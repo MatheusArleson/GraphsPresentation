@@ -170,6 +170,43 @@ public class GraphPresentationBean {
 		this.weightsRepresentation = "";
 	}
 	
+	public String getGraphTextHelp(){
+		switch (graphRepresentationMode) {
+		case ADJACENCY_MATRIX_LIST:
+			return 
+				"Adjacency Matrix:" + 
+				"&#10;&#10;" +
+				"- Must be an square matrix (2x2, 3x3, ...) &#10;" +
+				"- The number of rows\\columns define the number of nodes in the Graph. &#10;" +
+				"- If the Graph is weighted, the element itself will represent the weight. &#10;" +
+				"- Sample: &#10; 0,1, &#10; 1,0"  +
+				"&#10;&#10";
+			
+		case EDGES_LIST:
+			return
+			 "Edge List:" +
+	   		 "&#10;&#10;" +
+	   		 "- Each row represents the relationships of that node. (row 1 = relations of node 1, row 2 = relations of node 2, ...) &#10;" +
+	   		 "- The number of the nodes of the resulting Graph will be the maximum number of the text. " +
+	   		 "- Each element in a row is the number of a node that is related to node of this row. &#10;" +
+	   		 "-- Example: for a row number 5 with 1,2 as elements means that node 5 is related to nodes 1 and node 2. &#10;" +
+	   		 "&#10;&#10;" +
+	   		 "- Sample:" +
+	   		 "&#10;&#10; " + 
+	   		 ",3,4 &#10;" +
+	   		 ",7 &#10;" +
+	   		 "9 &#10;" +
+	   		 "&#10;" +
+	   		 "Will be a Graph with 9 nodes, with node 1 (represented in row 1) related to nodes 2,3 and 4. &#10;" + 
+	   		 "Node 2 (represented as row 2) related to nodes 5 and 7. &#10;" +
+	   		 "Node 3 is related to Node 9.&#10;" +
+	   		 "Other nodes will not have any relations.&#10;"; 
+			
+		default:
+			return "";
+		}
+	}
+	
 	//XXX ALGORITHMS METHODS
 	public void clearAlgorithmNodeNumber(){
 		this.algorithmNodeNumber = null;

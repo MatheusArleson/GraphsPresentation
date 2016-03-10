@@ -38,6 +38,7 @@ public class GraphPresentationBean {
 	
 	//XXX REPRESENTATION PROPERTIES
 	private String textRepresentation;
+	private String weightsRepresentation;
 	private UploadedFile uploadedFile;
 	
 	//XXX CONSTRUCTOR
@@ -64,12 +65,24 @@ public class GraphPresentationBean {
 	public void processChangeGraphRepresentationMode(){
 		clearTextRepresentation();
 		clearFileUpload();
+		
+		JsfUtil.addSucessMessage("Graph representation mode switched.");
+		
+		switch (graphRepresentationMode) {
+		case EDGES_LIST:
+			processToEdgeListModeChange();
+			return;
+
+		default:
+			return;
+		}
 	}
-	
+
 	public void clearGraph(){
 		setupDefaultGraphProperties();
 		clearDelimiters();
 		clearTextRepresentation();
+		clearWeightRepresentation();
 	}
 	
 	public void processGraph(){
@@ -86,13 +99,15 @@ public class GraphPresentationBean {
 			"cy",
 			"cy",
 			textRepresentation,
+			weightsRepresentation,
 			delimiters
 		);
 	}
 	
+	
 	//XXX DELIMITERS METHODS
 	private void clearDelimiters(){
-		this.delimiters = new Delimiters("[", "]", "\n", ",");
+		this.delimiters = new Delimiters("\n", ",", "0");
 	}
 	
 	private boolean validateDelimiters(Delimiters delimiters){
@@ -107,11 +122,9 @@ public class GraphPresentationBean {
 			delimiters.setRowDelimiter(rowDelimiter);
 		}
 		
-		String startDelimiter = delimiters.getStartDelimiter();
-		String endDelimiter = delimiters.getEndDelimiter();
 		String rowElementsDelimiter = delimiters.getRowElementsDelimiter();
 		
-		boolean anyEmpty = StringUtil.anyNullOrEmpty(startDelimiter, endDelimiter, rowDelimiter, rowElementsDelimiter);
+		boolean anyEmpty = StringUtil.anyNullOrEmpty(rowDelimiter, rowElementsDelimiter);
 		if(anyEmpty){
 			JsfUtil.addErrorMessage("Delimiters are required. Please inform them.");
 			return false;
@@ -120,8 +133,20 @@ public class GraphPresentationBean {
 		return true;
 	}
 	
+	//XXX REPRESENTATION METHODS
+	private void processToEdgeListModeChange(){
+		boolean isWeighted = graphProperties.isWeightedGraph();
+		if(isWeighted){
+			clearWeightRepresentation();
+		}
+	}
+	
 	private void clearTextRepresentation(){
 		this.textRepresentation = "";
+	}
+	
+	private void clearWeightRepresentation(){
+		this.weightsRepresentation = "";
 	}
 	
 	//XXX UPLOAD FILE METHODS
@@ -144,10 +169,16 @@ public class GraphPresentationBean {
 	}
 	
 	//XXX RENDERING METHODS
-	
 	public GraphRepresentations[] getGraphRepresentationModes(){
 		return GraphRepresentations.values();
 	}
+	
+	public boolean isRenderWeightRepresentationInput(){
+		boolean isWeighted = graphProperties.isWeightedGraph();
+		boolean isEdgeListMode = graphRepresentationMode.equals(GraphRepresentations.EDGES_LIST);
+		
+		return isEdgeListMode && isWeighted;
+	} 
 	
 	//XXX GETTERS/SETTERS
 	
@@ -187,6 +218,14 @@ public class GraphPresentationBean {
 		this.textRepresentation = textRepresentation;
 	}
 
+	public String getWeightsRepresentation() {
+		return weightsRepresentation;
+	}
+	
+	public void setWeightsRepresentation(String weightsRepresentation) {
+		this.weightsRepresentation = weightsRepresentation;
+	}
+	
 	public UploadedFile getUploadedFile() {
 		return uploadedFile;
 	}

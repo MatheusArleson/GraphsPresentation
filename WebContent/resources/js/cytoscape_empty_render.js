@@ -11,6 +11,7 @@ var layoutOptions = {
 function redraw(){
 	myLayout = cy.makeLayout(layoutOptions);
 	myLayout.run();
+	cy.fit();
 }
 
 function initCy(){

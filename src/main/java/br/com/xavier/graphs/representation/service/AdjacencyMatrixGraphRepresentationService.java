@@ -18,20 +18,23 @@ import br.com.xavier.graphs.impl.simple.undirected.matrix.MatrixSUUGraph;
 import br.com.xavier.graphs.impl.simple.undirected.matrix.MatrixSUWGraph;
 import br.com.xavier.graphs.representation.model.Delimiters;
 import br.com.xavier.graphs.representation.model.GraphProperties;
-import br.com.xavier.graphs.representation.util.RandomBigDecimal;
-import br.com.xavier.matrix.impl.BitSquareMatrix;
-import br.com.xavier.matrix.impl.parser.BitSquareMatrixParser;
+import br.com.xavier.matrix.impl.DefaultSquareMatrix;
+import br.com.xavier.matrix.impl.parser.DefaultSquareMatrixParser;
 import br.com.xavier.matrix.interfaces.Matrix;
 
 @Service
 public class AdjacencyMatrixGraphRepresentationService {
 	
 	//XXX PARSER PROPERTY
-	private BitSquareMatrixParser matrixParser;
+	private DefaultSquareMatrixParser<String> matrixParser;
+	private String prefix;
+	private String suffix; 
 	
 	//XXX CONSTRUCTOR
 	public AdjacencyMatrixGraphRepresentationService() {
-		this.matrixParser = new BitSquareMatrixParser();
+		this.matrixParser = new DefaultSquareMatrixParser<String>();
+		prefix = matrixParser.getMatrixRepresentationStartDelimiter() + matrixParser.getMatrixRepresentationMatrixStartDelimiter();
+		suffix = matrixParser.getMatrixRepresentationEndDelimiter() + matrixParser.getMatrixRepresentationMatrixEndDelimiter();
 	}
 
 	//XXX GENERATE SCRIPT METHODS
@@ -40,14 +43,16 @@ public class AdjacencyMatrixGraphRepresentationService {
 		String htmlElementContainer,
 		String graphWidgetVar,
 		String textRepresentation,
+		String weightsRepresentation,
 		Delimiters delimiters
 	) {
-		
 		updateDelimiters(delimiters);
 		
-		textRepresentation = matrixParser.getMatrixRepresentationStartDelimiter() + textRepresentation + matrixParser.getMatrixRepresentationEndDelimiter();
+		textRepresentation =  prefix + textRepresentation + suffix;
 		
-		BitSquareMatrix matrix = (BitSquareMatrix) matrixParser.fromMatrixString(textRepresentation);
+		DefaultSquareMatrix<String> matrix = (DefaultSquareMatrix<String>) matrixParser.fromMatrixString(textRepresentation);
+		matrix.setRepresentsEmpty(delimiters.getRepresentsEmpty());
+		
 		int numberOfNodes = matrix.getRowCount();
 		
 		NumberedNodesFactory nnf = new NumberedNodesFactory();
@@ -65,9 +70,9 @@ public class AdjacencyMatrixGraphRepresentationService {
 		String htmlElementContainer,
 		String graphWidgetVar,
 		LinkedHashSet<NumberedNode> nodesSet, 
-		Matrix<Integer> matrix
+		Matrix<String> matrix
 	) {
-		AbstractGraph<NumberedNode, DefaultWeightedEdge<NumberedNode>> graph = null;
+		AbstractGraph<NumberedNode, DefaultWeightedEdge<NumberedNode, String>> graph = null;
 		
 		if(graphProperties.isDirectedGraph()){
 			graph = new MatrixSDWGraph<>();			
@@ -87,16 +92,16 @@ public class AdjacencyMatrixGraphRepresentationService {
 			for (int column = 0; column < matrix.getColumnCount(); column++) {
 				NumberedNode columnObj = nodesList.get(column);
 				
-				Integer value = matrix.get(column, row);
+				String value = matrix.get(column, row);
 				boolean isEmpty = matrix.checkEmpty(value);
 				if(!isEmpty){
-					DefaultWeightedEdge<NumberedNode> edge = new DefaultWeightedEdge<NumberedNode>(rowObj, columnObj, RandomBigDecimal.generateRandom());
+					DefaultWeightedEdge<NumberedNode, String> edge = new DefaultWeightedEdge<NumberedNode, String>(rowObj, columnObj, value);
 					graph.addEdge(edge);
 				}
 			}
 		}
 		
-		CytoscapeWeightedParser<NumberedNode, DefaultWeightedEdge<NumberedNode>> parser = new CytoscapeWeightedParser<>();
+		CytoscapeWeightedParser<NumberedNode, DefaultWeightedEdge<NumberedNode, String>, String> parser = new CytoscapeWeightedParser<>();
 		String parsedStr = parser.parse(graph, htmlElementContainer, graphWidgetVar);
 		return parsedStr;
 	}
@@ -106,7 +111,7 @@ public class AdjacencyMatrixGraphRepresentationService {
 		String htmlElementContainer,
 		String graphWidgetVar,
 		LinkedHashSet<NumberedNode> nodesSet, 
-		Matrix<Integer> matrix
+		Matrix<String> matrix
 	) {
 		AbstractGraph<NumberedNode, DefaultUnweightedEdge<NumberedNode>> graph = null;
 		
@@ -128,8 +133,7 @@ public class AdjacencyMatrixGraphRepresentationService {
 			for (int column = 0; column < matrix.getColumnCount(); column++) {
 				NumberedNode columnObj = nodesList.get(column);
 				
-				Integer value = matrix.get(column, row);
-				//Integer value = matrix.get(column, row);
+				String value = matrix.get(column, row);
 				boolean isEmpty = matrix.checkEmpty(value);
 				if(!isEmpty){
 					DefaultUnweightedEdge<NumberedNode> edge = new DefaultUnweightedEdge<NumberedNode>(rowObj, columnObj);
@@ -145,8 +149,6 @@ public class AdjacencyMatrixGraphRepresentationService {
 	
 	//XXX DELIMITERS METHODS
 	private void updateDelimiters(Delimiters delimiters){
-		this.matrixParser.setMatrixRepresentationMatrixStartDelimiter(delimiters.getStartDelimiter());
-		this.matrixParser.setMatrixRepresentationMatrixEndDelimiter(delimiters.getEndDelimiter());
 		this.matrixParser.setMatrixRepresentationMatrixRowSeparator(delimiters.getRowDelimiter());
 		this.matrixParser.setMatrixRepresentationMatrixRowElementsSeparator(delimiters.getRowElementsDelimiter());
 	}

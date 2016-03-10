@@ -2,33 +2,15 @@ package br.com.xavier.graphs.representation.model;
 
 public class Delimiters {
 
-	private String startDelimiter;
-	private String endDelimiter;
 	private String rowDelimiter;
 	private String rowElementsDelimiter;
+	private String representsEmpty;
 
-	public Delimiters(String startDelimiter, String endDelimiter, String rowDelimiter, String rowElementsDelimiter) {
+	public Delimiters(String rowDelimiter, String rowElementsDelimiter, String representsEmpty) {
 		super();
-		this.startDelimiter = startDelimiter;
-		this.endDelimiter = endDelimiter;
 		this.rowDelimiter = rowDelimiter;
 		this.rowElementsDelimiter = rowElementsDelimiter;
-	}
-
-	public String getStartDelimiter() {
-		return startDelimiter;
-	}
-
-	public void setStartDelimiter(String startDelimiter) {
-		this.startDelimiter = startDelimiter;
-	}
-
-	public String getEndDelimiter() {
-		return endDelimiter;
-	}
-
-	public void setEndDelimiter(String endDelimiter) {
-		this.endDelimiter = endDelimiter;
+		this.representsEmpty = representsEmpty;
 	}
 
 	public String getRowDelimiter() {
@@ -45,5 +27,13 @@ public class Delimiters {
 
 	public void setRowElementsDelimiter(String rowElementsDelimiter) {
 		this.rowElementsDelimiter = rowElementsDelimiter;
+	}
+	
+	public String getRepresentsEmpty() {
+		return representsEmpty;
+	}
+	
+	public void setRepresentsEmpty(String representsEmpty) {
+		this.representsEmpty = representsEmpty;
 	}
 }

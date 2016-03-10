@@ -1,6 +1,7 @@
 package br.com.xavier.graphs.representation.util;
 
 import java.nio.charset.Charset;
+import java.util.regex.Pattern;
 
 import br.com.xavier.graphs.representation.util.checkers.NullChecker;
 
@@ -14,6 +15,22 @@ public class StringUtil {
 		NullChecker.checkNullParameter(content, encoding);
 		
 		return new String(content, encoding);
+	}
+	
+	public static int getMaximumNumber(String str, String delimiter){
+		NullChecker.checkNullParameter(str, delimiter);
+		
+		str = str.replaceAll(" ", "");
+		String[] testArray = str.split(Pattern.compile(delimiter).toString());
+		int max = Integer.MIN_VALUE;
+
+		for (int i = 0; i < testArray.length; i++) {
+		     if (Integer.parseInt(testArray[i]) > max) {
+		         max = Integer.parseInt(testArray[i]);
+		     }
+		}
+		
+		return max;
 	}
 	
 	//XXX SINGLE STRING METHODS

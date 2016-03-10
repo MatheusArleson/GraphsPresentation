@@ -63,67 +63,70 @@
 		
 			<div id="dataDiv" class="ui-fluid">
 		
-				<p:panelGrid id="configGrid" layout="grid" columns="3"
-							 columnClasses="ui-grid-col-4" styleClass="ui-panelgrid-blank"
+				<p:panelGrid id="configGrid" layout="grid" columns="2"
+							 columnClasses="ui-grid-col-6" styleClass="ui-panelgrid-blank"
 							 style="border:none;">
-		
-					<p:fieldset legend="Graph Properties">
-						<p:panelGrid columns="2">
+					
+					<h:panelGroup id="graphPropPanel">
 						
-							<p:selectBooleanCheckbox id="checkDirectedGraph"
-													 label="Directed Graph"
-													 value="#{graphPresentationBean.graphProperties.directedGraph}">
-								<p:ajax event="change" process="@this"/>
-							</p:selectBooleanCheckbox>
-							<p:outputLabel for="checkDirectedGraph" value="Directed"/>
-							
-							<p:selectBooleanCheckbox id="checkWeightedGraph"
-													 label="Weighted Graph"
-													 value="#{graphPresentationBean.graphProperties.weightedGraph}">
-								<p:ajax event="change" process="@this"/>
-							</p:selectBooleanCheckbox>
-							<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
-							
-							<p:selectBooleanCheckbox id="checkLoopsGraph"
-													 label="Loops allowed in Graph"
-													 value="#{graphPresentationBean.graphProperties.loopsAllowed}"
-													 disabled="true">
-								<p:ajax event="change" process="@this"/>
-							</p:selectBooleanCheckbox>
-							<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
-							
-							<p:selectBooleanCheckbox id="checkMultipleEdgesGraph"
-													 label="Multiple Edges Allowed in Graph"
-													 value="#{graphPresentationBean.graphProperties.multipleEdgesAllowed}"
-													 disabled="true">
-								<p:ajax event="change" process="@this"/>
-							</p:selectBooleanCheckbox>
-							<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
-						</p:panelGrid>
+						<p:fieldset legend="Graph Properties">
+							<p:panelGrid columns="4">
 						
-					</p:fieldset>
-		
-					<p:fieldset legend="Graph Representation Delimiters">
-						<p:outputPanel id="delimitMainPanel">
+								<p:selectBooleanCheckbox id="checkDirectedGraph"
+														 label="Directed Graph"
+														 value="#{graphPresentationBean.graphProperties.directedGraph}">
+									<p:ajax event="change" 
+											process="@this"
+											onstart="showLoading();"
+									 		oncomplete="hideLoading();">
+									 </p:ajax>
+								</p:selectBooleanCheckbox>
+								<p:outputLabel for="checkDirectedGraph" value="Directed"/>
+								
+								<p:selectBooleanCheckbox id="checkWeightedGraph"
+														 label="Weighted Graph"
+														 value="#{graphPresentationBean.graphProperties.weightedGraph}">
+									<p:ajax event="change" 
+											process="@this" 
+											update="graphRepPanel"
+											onstart="showLoading();"
+									 		oncomplete="hideLoading();">
+									 </p:ajax>
+								</p:selectBooleanCheckbox>
+								<p:outputLabel for="checkWeightedGraph" value="Weighted"/>
+								
+								<p:selectBooleanCheckbox id="checkLoopsGraph"
+														 label="Loops allowed in Graph"
+														 value="#{graphPresentationBean.graphProperties.loopsAllowed}"
+														 disabled="true">
+									<p:ajax event="change" 
+											process="@this"
+											onstart="showLoading();"
+									 		oncomplete="hideLoading();">
+									 </p:ajax>
+								</p:selectBooleanCheckbox>
+								<p:outputLabel for="checkLoopsGraph" value="Loops Allowed"/>
+								
+								<p:selectBooleanCheckbox id="checkMultipleEdgesGraph"
+														 label="Multiple Edges Allowed in Graph"
+														 value="#{graphPresentationBean.graphProperties.multipleEdgesAllowed}"
+														 disabled="true">
+									<p:ajax event="change" 
+											process="@this"
+											onstart="showLoading();"
+									 		oncomplete="hideLoading();">
+									 </p:ajax>
+								</p:selectBooleanCheckbox>
+								<p:outputLabel for="checkMultipleEdgesGraph" value="Multiple Edges"/>
+								
+							</p:panelGrid>
+						</p:fieldset>
 						
+						<p:spacer width="1px" height="10px"/>
+						
+						<p:fieldset legend="Graph Representation Properties">
 							<p:outputPanel id="delimitersPanel">
 								<p:panelGrid columns="2">
-									
-									<p:outputLabel value="Start:*"/>
-									<p:inputText id="delStart" label="Start Delimiter"
-												 value="#{graphPresentationBean.delimiters.startDelimiter}"
-												 required="true">
-										<p:ajax event="keyup" process="@this"/>
-										<p:ajax event="blur" process="@this"/>
-									</p:inputText>
-									
-									<p:outputLabel value="End:*"/>
-									<p:inputText id="delEnd" label="End Delimiter"
-												 value="#{graphPresentationBean.delimiters.endDelimiter}"
-												 required="true">
-										<p:ajax event="keyup" process="@this"/>
-										<p:ajax event="blur" process="@this"/>
-									</p:inputText>
 									
 									<p:outputLabel value="Row:"/>
 									<p:inputText id="delRow" label="Row Delimiter"
@@ -141,51 +144,79 @@
 										<p:ajax event="blur" process="@this"/>
 									</p:inputText>
 									
+									<p:outputLabel value="Represents Empty:*"/>
+									<p:inputText id="delRepEmpty" label="Represents Empty Delimiter"
+												 value="#{graphPresentationBean.delimiters.representsEmpty}"
+												 required="true">
+										<p:ajax event="keyup" process="@this"/>
+										<p:ajax event="blur" process="@this"/>
+									</p:inputText>
+									
 								</p:panelGrid>
 							</p:outputPanel>
-							
-						</p:outputPanel>
-					</p:fieldset>
-		
-					<p:fieldset legend="Graph Representation">
-						<h:panelGroup id="representationGroup">
+						</p:fieldset>
 						
-							<p:outputLabel for="somRepMode" value="Type:"/>
-							<p:selectOneMenu id="somRepMode" value="#{graphPresentationBean.graphRepresentationMode}">
-								<f:selectItems	value="#{graphPresentationBean.graphRepresentationModes}"
-												var="repMode" 
-												itemLabel="#{repMode.label}"
-												itemValue="#{repMode}">
-								</f:selectItems>
+					</h:panelGroup>
+							
+					<h:panelGroup id="graphRepPanel">
+					
+						<p:fieldset legend="Graph Representation">
+							<h:panelGroup id="representationGroup">
+							
+								<p:outputLabel for="somRepMode" value="Type:"/>
+								<p:selectOneMenu id="somRepMode" value="#{graphPresentationBean.graphRepresentationMode}">
+									<f:selectItems	value="#{graphPresentationBean.graphRepresentationModes}"
+													var="repMode" 
+													itemLabel="#{repMode.label}"
+													itemValue="#{repMode}">
+									</f:selectItems>
+									
+									<p:ajax event="itemSelect"
+											listener="#{graphPresentationBean.processChangeGraphRepresentationMode}"
+											process="@this somRepMode"
+											update="graphRepPanel"
+											onstart="showLoading();"
+									 		oncomplete="hideLoading();">
+									</p:ajax>
+									
+								</p:selectOneMenu>
 								
-								<p:ajax event="itemSelect"
-										listener="#{graphPresentationBean.processChangeGraphRepresentationMode}"
-										process="@this somRepMode"
-										update="graphRepresentationText">
-								</p:ajax>
+								<p:spacer width="1px" height="20px"/>
 								
-							</p:selectOneMenu>
-							
-							<p:outputLabel for="fileGraphRepresentationBtn" value="File:"/>
-							<p:commandButton 	id="fileGraphRepresentationBtn"
-												value="Choose file..."
-												actionListener="#{graphPresentationBean.clearFileUpload()}"
-												process="@this"
-												update="@this"
-												onstart="showLoading();"
-												oncomplete="hideLoading();showUploadDialog();">
-							</p:commandButton>
-							
-							<p:outputLabel for="graphRepresentationText" value="Text:"/>
-							<p:inputTextarea id="graphRepresentationText"
-											 value="#{graphPresentationBean.textRepresentation}"
-											 autoResize="true"
-											 required="false">
-							</p:inputTextarea>
-							
-						</h:panelGroup>
-					</p:fieldset>
-		
+								<p:outputLabel value="File:"/>
+								<p:commandButton 	id="fileGraphRepresentationBtn"
+													value="Choose file..."
+													actionListener="#{graphPresentationBean.clearFileUpload()}"
+													process="@this"
+													update="@this"
+													onstart="showLoading();"
+													oncomplete="hideLoading();showUploadDialog();">
+								</p:commandButton>
+								
+								<p:spacer width="1px" height="20px"/>
+								
+								<p:outputLabel value="Graph:"/>
+								<p:inputTextarea id="graphRepresentationText" label="Graph representation text"
+												 value="#{graphPresentationBean.textRepresentation}"
+												 autoResize="true"
+												 required="true">
+								</p:inputTextarea>
+								
+								<p:spacer width="1px" height="20px"/>
+								
+								<p:outputLabel value="Weights:" rendered="#{graphPresentationBean.renderWeightRepresentationInput}"/>
+								<p:inputTextarea id="weightsRepresentationText" label="Edges weight representation text"
+												 rendered="#{graphPresentationBean.renderWeightRepresentationInput}"
+												 value="#{graphPresentationBean.weightsRepresentation}"
+												 autoResize="true"
+												 required="true">
+								</p:inputTextarea>								
+								
+							</h:panelGroup>
+						</p:fieldset>
+					
+					</h:panelGroup>
+					
 				</p:panelGrid>
 		
 			</div>

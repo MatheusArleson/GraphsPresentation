@@ -6,11 +6,13 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.xavier.graphs.representation.exceptions.InvalidGraphRepresentation;
 import br.com.xavier.graphs.representation.model.Delimiters;
 import br.com.xavier.graphs.representation.model.GraphProperties;
 import br.com.xavier.graphs.representation.model.enums.GraphRepresentations;
 import br.com.xavier.graphs.representation.util.StringUtil;
 import br.com.xavier.graphs.representation.util.checkers.GraphRepresentationChecker;
+import br.com.xavier.graphs.representation.util.checkers.NullChecker;
 import br.com.xavier.jsf.JsfUtil;
 import br.com.xavier.jsf.PrimefacesUtil;
 import br.com.xavier.matrix.exception.InvalidMatrixRepresentation;
@@ -39,10 +41,21 @@ public class GraphPresentationService {
 		GraphRepresentations graphRepresentationMode,
 		String htmlElementContainer,
 		String graphWidgetVar,
-		String textRepresentation, 
+		String textRepresentation,
+		String weightsRepresentation, 
 		Delimiters delimiters
 	) {
 		try {
+			
+			validate(
+				graphRepresentationMode, 
+				graphProperties, 
+				htmlElementContainer, 
+				graphWidgetVar, 
+				textRepresentation,
+				weightsRepresentation,
+				delimiters
+			);
 			
 			String graphScript = generateGraphScript(
 				graphRepresentationMode, 
@@ -50,6 +63,7 @@ public class GraphPresentationService {
 				htmlElementContainer, 
 				graphWidgetVar, 
 				textRepresentation,
+				weightsRepresentation,
 				delimiters
 			);
 			
@@ -71,14 +85,52 @@ public class GraphPresentationService {
 		}
 	}
 
+	private void validate(
+		GraphRepresentations graphRepresentationMode, 
+		GraphProperties graphProperties,
+		String htmlElementContainer, 
+		String graphWidgetVar, 
+		String textRepresentation, 
+		String weightsRepresentation,
+		Delimiters delimiters
+	) throws Exception {
+		
+		NullChecker.checkNullParameter(
+			graphRepresentationMode, graphProperties, 
+			htmlElementContainer, graphWidgetVar, 
+			textRepresentation, delimiters
+		);
+		
+		if(StringUtil.isNullOrEmpty(htmlElementContainer)){
+			throw new InvalidGraphRepresentation("Invalid htmlElementContainer.");
+		}
+		
+		if(StringUtil.isNullOrEmpty(graphWidgetVar)){
+			throw new InvalidGraphRepresentation("Invalid graphWidgetVar.");
+		}
+		
+		if(StringUtil.isNullOrEmpty(textRepresentation)){
+			throw new InvalidGraphRepresentation("Invalid textRepresentation.");
+		}
+		
+		boolean isWeightedGraph = graphProperties.isWeightedGraph();
+		boolean isEdgeListRep = graphRepresentationMode.equals(GraphRepresentations.EDGES_LIST);
+		if(isWeightedGraph && isEdgeListRep && StringUtil.isNullOrEmpty(weightsRepresentation)){
+			throw new InvalidGraphRepresentation("Invalid weightsRepresentation.");
+		}
+	}
+
 	private String generateGraphScript(
 		GraphRepresentations graphRepresentationMode, 
 		GraphProperties graphProperties, 
 		String htmlElementContainer,
 		String graphWidgetVar,
 		String textRepresentation,
+		String weightRepresentation,
 		Delimiters delimiters
 	) {
+		textRepresentation = textRepresentation.replaceAll(" ", "");
+		
 		switch (graphRepresentationMode) {
 		case ADJACENCY_MATRIX_LIST:
 			return adjacencyMatrixGraphRepresentationService.generateAdjacencyMatrixGraphScript(
@@ -86,6 +138,7 @@ public class GraphPresentationService {
 				htmlElementContainer, 
 				graphWidgetVar,
 				textRepresentation,
+				weightRepresentation,
 				delimiters
 			);
 			
@@ -95,6 +148,7 @@ public class GraphPresentationService {
 				htmlElementContainer, 
 				graphWidgetVar,
 				textRepresentation,
+				weightRepresentation,
 				delimiters
 			);
 			

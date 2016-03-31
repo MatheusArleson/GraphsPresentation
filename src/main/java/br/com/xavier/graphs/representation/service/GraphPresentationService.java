@@ -23,7 +23,7 @@ import br.com.xavier.matrix.exception.InvalidMatrixRepresentationDelimiter;
 @Service
 public class GraphPresentationService {
 	
-	private static final String GRAPH_ALGORITM_COMMAND_BASE_STR = "doAlgorithm('#1', #2, #3);";
+	private static final String GRAPH_ALGORITM_COMMAND_BASE_STR = "doAlgorithm('#1', #2, #3, #4);";
 	
 	@Autowired
 	private AdjacencyMatrixGraphRepresentationService adjacencyMatrixGraphRepresentationService;
@@ -168,17 +168,35 @@ public class GraphPresentationService {
 		}
 	}
 
-	public boolean doGraphAlgorithm(GraphAlgorithms graphAlgorithm, Integer algorithmNodeNumber, boolean directedGraph, boolean isAlreadyParsed) {
+	public boolean doGraphAlgorithm(
+		GraphAlgorithms graphAlgorithm, 
+		Integer algorithmNodeNumber, 
+		Integer algorithmTargetNodeNumber, 
+		GraphProperties graphProperties, 
+		boolean isAlreadyParsed
+	) {
 		try{
-			NullChecker.checkNullParameter(graphAlgorithm, algorithmNodeNumber, directedGraph);
+			NullChecker.checkNullParameter(graphAlgorithm, algorithmNodeNumber, graphProperties);
 			
 			if(algorithmNodeNumber < 1){
 				throw new IllegalNodeException("Node number must be equal or greater than one.");
 			}
 			
+			if(algorithmTargetNodeNumber == null){
+				algorithmTargetNodeNumber = 0;
+			}
+			
+			if(graphAlgorithm.equals(GraphAlgorithms.DIJKSTRA) && !graphProperties.isWeightedGraph()){
+				throw new IllegalNodeException("Dijkstra algorithms can only be applied to weighted Graphs.");
+			}
+			
 			String nodeNumberStr = String.valueOf(algorithmNodeNumber);
-			String isDirectedStr = String.valueOf(directedGraph);
-			String doAlgCommand = GRAPH_ALGORITM_COMMAND_BASE_STR.replace("#1", graphAlgorithm.getLabel()).replace("#2", nodeNumberStr).replace("#3", isDirectedStr);
+			String targetNodeNumberStr = String.valueOf(algorithmTargetNodeNumber);
+			String isDirectedStr = String.valueOf(graphProperties.isDirectedGraph());
+			String doAlgCommand = GRAPH_ALGORITM_COMMAND_BASE_STR.replace("#1", graphAlgorithm.getLabel())
+								  .replace("#2", nodeNumberStr)
+								  .replace("#3", targetNodeNumberStr)
+								  .replace("#4", isDirectedStr);
 			
 			System.out.println("-------------");
 			System.out.println(doAlgCommand);

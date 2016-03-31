@@ -75,32 +75,55 @@ function initCy(){
 	});
 }
 
-function doAlgorithm(algName, nodeId, isDirected){
+function doAlgorithm(algName, nodeId, targetNode, isDirected){
 	
 	var nodeSelector = '#' + nodeId;
 	var alg;
+	var isDijkstra = false;
 	
 	switch (algName) {
 	case 'BFS':
-		alg = cy.elements().bfs(nodeSelector, function(){}, isDirected); 
+		alg = cy.elements().bfs(nodeSelector, function(){}, isDirected);
+		isDijkstra = false;
 		break;
+	
 	case 'DFS':
-		alg = cy.elements().dfs(nodeSelector, function(){}, isDirected); 
+		alg = cy.elements().dfs(nodeSelector, function(){}, isDirected);
+		isDijkstra = false;
 		break;
+	
 	case 'DIJ':
+		alg = cy.elements().dijkstra(nodeSelector, function(){ return this.data('label'); }, isDirected);
+		isDijkstra = true;
+		
+		var targetNodeSelector = '#' + targetNode;
+		var algPath = alg.pathTo(targetNodeSelector);
+		var algDistance = (alg.distanceTo(targetNodeSelector)).length;
+		
+		console.log(algPath);
+		console.log(algDistance);
+		
 		break;
+	
 	default:
 		break;
 	}
-	
+
 	var i = 0;
-	var highlightNextEle = function(){
-	  if( i < alg.path.length ){
-	    alg.path[i].addClass('highlighted');
-	  
-	    i++;
-	    setTimeout(highlightNextEle, 1000);
-	  }
+	var highlightNextEle = function() {
+		if(!isDijkstra){
+			if (i < alg.path.length) {
+				alg.path[i].addClass('highlighted');
+			}
+		} else {
+			if (i < algDistance) {
+				console.log(i);
+				algPath[i].addClass('highlighted');
+			}
+		}
+		
+		i++;
+		setTimeout(highlightNextEle, 1000);
 	};
 
 	// kick off first highlight

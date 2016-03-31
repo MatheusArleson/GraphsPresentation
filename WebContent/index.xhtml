@@ -264,6 +264,12 @@
 												 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}">
 									</p:inputText>
 									
+									<p:outputLabel id="lblAlgTargetNodeNumber" value="Target Node number:"/>
+									<p:inputText id="algTargetNodeNumber"
+												 value="#{graphPresentationBean.algorithmTargetNodeNumber}"
+												 disabled="#{!graphPresentationBean.canEditGraphAlgorithmTargetNode}">
+									</p:inputText>
+									
 									<p:outputLabel id="lblSomAlg" value="Algorithm:"/>
 									<p:selectOneMenu id="somAlg" value="#{graphPresentationBean.graphAlgorithm}"
 													 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}">
@@ -275,8 +281,8 @@
 										
 										<p:ajax event="itemSelect"
 												listener="#{graphPresentationBean.processChangeGraphAlgorithm}"
-												process="@this algNodeNumber"
-												update=":tooltipsForm:tpPanel"
+												process="@this algNodeNumber algTargetNodeNumber"
+												update=":tooltipsForm:tpPanel algsPanel"
 												onstart="showLoading();"
 										 		oncomplete="hideLoading();">
 										</p:ajax>
@@ -287,7 +293,7 @@
 													 value="Process Algorithm"
 													 disabled="#{!graphPresentationBean.canDoGraphAlgorithmns}"
 													 actionListener="#{graphPresentationBean.processGraphAlgorithm}"
-													 process="@this algNodeNumber somAlg"
+													 process="@this algNodeNumber algTargetNodeNumber somAlg"
 													 update=":tooltipsForm:tpPanel"
 													 onstart="showLoading();"
 													 oncomplete="hideLoading();">
@@ -441,6 +447,7 @@
 				<p:tooltip id="tpWeightsRepText" for=":mainForm:lblWeightsRepText :mainForm:lblWeightsRepText" trackMouse="true" showDelay="850" value="Text that represents the Graph Edges Weights to be created."/>
 				
 				<p:tooltip id="tpAlgNodeNumber" for=":mainForm:algNodeNumber :mainForm:lblAlgNodeNumber" trackMouse="true" showDelay="850" value="Number of the Node to apply the algorithm."/>
+				<p:tooltip id="tpAlgTargetNodeNumber" for=":mainForm:algTargetNodeNumber :mainForm:lblAlgTargetNodeNumber" trackMouse="true" showDelay="850" value="Number of the Target Node to apply the algorithm."/>
 				<p:tooltip id="tpAlg" for=":mainForm:somAlg :mainForm:lblSomAlg" trackMouse="true" showDelay="850" value="Algorithm to apply on the Graph."/>
 				<p:tooltip id="tpAlgBtn" for=":mainForm:doAlgBtn" trackMouse="true" showDelay="850" value="Apply algorithm on the Graph."/>
 				

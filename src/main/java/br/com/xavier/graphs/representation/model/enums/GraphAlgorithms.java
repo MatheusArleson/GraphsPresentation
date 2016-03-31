@@ -3,8 +3,8 @@ package br.com.xavier.graphs.representation.model.enums;
 public enum GraphAlgorithms {
 	
 	BFS("BFS"),
-	DFS("DFS");
-	//DIJKSTRA("DIJ");
+	DFS("DFS"),
+	DIJKSTRA("DIJ");
 	
 	private final String label;
 	

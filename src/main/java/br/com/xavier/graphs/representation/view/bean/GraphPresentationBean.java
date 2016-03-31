@@ -1,5 +1,6 @@
 package br.com.xavier.graphs.representation.view.bean;
 
+import java.lang.annotation.Target;
 import java.nio.charset.Charset;
 
 import javax.annotation.PostConstruct;
@@ -49,6 +50,7 @@ public class GraphPresentationBean {
 	
 	//XXX ALGORITMS PROPERTIES
 	private Integer algorithmNodeNumber;
+	private Integer algorithmTargetNodeNumber;
 	private GraphAlgorithms graphAlgorithm;
 	
 	//XXX CONSTRUCTOR
@@ -210,14 +212,27 @@ public class GraphPresentationBean {
 	//XXX ALGORITHMS METHODS
 	public void clearAlgorithmNodeNumber(){
 		this.algorithmNodeNumber = null;
+		this.algorithmTargetNodeNumber = null;
 	}
 	
 	public void processChangeGraphAlgorithm(){
-		System.out.println("");
+		switch (graphAlgorithm) {
+		case DIJKSTRA:
+			algorithmTargetNodeNumber = null;
+			return;
+		default:
+			return;
+		}
 	}
 	
 	public void processGraphAlgorithm(){
-		this.isAlgorithmParsed = graphPresentationService.doGraphAlgorithm(graphAlgorithm, algorithmNodeNumber, graphProperties.isDirectedGraph(), isAlgorithmParsed);
+		this.isAlgorithmParsed = graphPresentationService.doGraphAlgorithm(
+			graphAlgorithm, 
+			algorithmNodeNumber, 
+			algorithmTargetNodeNumber, 
+			graphProperties, 
+			isAlgorithmParsed
+		);
 	}
 	
 	//XXX UPLOAD FILE METHODS
@@ -282,6 +297,15 @@ public class GraphPresentationBean {
 	
 	public boolean isCanDoGraphAlgorithmns(){
 		return isGraphParsed;
+	}
+	
+	public boolean isCanEditGraphAlgorithmTargetNode(){
+		switch (graphAlgorithm) {
+		case DIJKSTRA:
+			return true;
+		default:
+			return false;
+		}
 	}
 	
 	//XXX GETTERS/SETTERS
@@ -361,6 +385,14 @@ public class GraphPresentationBean {
 	
 	public void setAlgorithmNodeNumber(Integer algorithmNodeNumber) {
 		this.algorithmNodeNumber = algorithmNodeNumber;
+	}
+	
+	public Integer getAlgorithmTargetNodeNumber() {
+		return algorithmTargetNodeNumber;
+	}
+	
+	public void setAlgorithmTargetNodeNumber(Integer algorithmTargetNodeNumber) {
+		this.algorithmTargetNodeNumber = algorithmTargetNodeNumber;
 	}
 	
 	public GraphAlgorithms getGraphAlgorithm() {

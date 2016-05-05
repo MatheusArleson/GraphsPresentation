@@ -176,27 +176,30 @@ public class GraphPresentationService {
 		boolean isAlreadyParsed
 	) {
 		try{
-			NullChecker.checkNullParameter(graphAlgorithm, algorithmNodeNumber, graphProperties);
+			NullChecker.checkNullParameter(graphAlgorithm, graphProperties);
 			
-			if(algorithmNodeNumber < 1){
+			if(graphAlgorithm.isNeedSourceNode() && algorithmNodeNumber < 1){
 				throw new IllegalNodeException("Node number must be equal or greater than one.");
 			}
 			
-			if(algorithmTargetNodeNumber == null){
+			if(graphAlgorithm.isNeedTargetNode() && algorithmTargetNodeNumber == null){
+				throw new IllegalNodeException("Node number must be equal or greater than one.");
+			} else {
 				algorithmTargetNodeNumber = 0;
 			}
 			
-			if(graphAlgorithm.equals(GraphAlgorithms.DIJKSTRA) && !graphProperties.isWeightedGraph()){
-				throw new IllegalNodeException("Dijkstra algorithms can only be applied to weighted Graphs.");
+			if(graphAlgorithm.isOnlyWeighted() && !graphProperties.isWeightedGraph()){
+				throw new IllegalNodeException("Weighted Algorithms can only be applied to weighted Graphs.");
 			}
 			
 			String nodeNumberStr = String.valueOf(algorithmNodeNumber);
 			String targetNodeNumberStr = String.valueOf(algorithmTargetNodeNumber);
 			String isDirectedStr = String.valueOf(graphProperties.isDirectedGraph());
-			String doAlgCommand = GRAPH_ALGORITM_COMMAND_BASE_STR.replace("#1", graphAlgorithm.getLabel())
-								  .replace("#2", nodeNumberStr)
-								  .replace("#3", targetNodeNumberStr)
-								  .replace("#4", isDirectedStr);
+			String doAlgCommand = GRAPH_ALGORITM_COMMAND_BASE_STR
+								.replace("#1", graphAlgorithm.getLabel())
+								.replace("#2", nodeNumberStr)
+								.replace("#3", targetNodeNumberStr)
+								.replace("#4", isDirectedStr);
 			
 			System.out.println("-------------");
 			System.out.println(doAlgCommand);

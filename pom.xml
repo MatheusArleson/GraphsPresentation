@@ -54,6 +54,26 @@
 	</dependencyManagement>
 	
 	<dependencies>
+		<!-- MY GRAPHS LIBRARY  -->
+		<dependency>
+			<groupId>br.com.xavier</groupId>
+  			<artifactId>Graphs</artifactId>
+  			<version>1.5.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.xavier</groupId>
+  			<artifactId>GraphsCytoscapeParser</artifactId>
+  			<version>1.3.0</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>br.com.xavier</groupId>
+			<artifactId>Matrix</artifactId>
+			<version>1.2.0</version>
+			<scope>compile</scope>
+  		</dependency>
+	
 		<!-- JSF -->
 		<dependency>
 			<groupId>com.sun.faces</groupId>
@@ -202,26 +222,6 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.7</version>
 		</dependency>
-		
-		<!-- MY GRAPHS LIBRARY  -->
-		<dependency>
-			<groupId>br.com.xavier</groupId>
-  			<artifactId>Graphs</artifactId>
-  			<version>1.3.0</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>br.com.xavier</groupId>
-  			<artifactId>GraphsCytoscapeParser</artifactId>
-  			<version>1.1.0</version>
-		</dependency>
-		
-		<dependency>
-  			<groupId>br.com.xavier</groupId>
-			<artifactId>Matrix</artifactId>
-			<version>1.2.0</version>
-			<scope>compile</scope>
-  		</dependency>
   		
 	</dependencies>
 </project>

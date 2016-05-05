@@ -1,6 +1,5 @@
 package br.com.xavier.graphs.representation.view.bean;
 
-import java.lang.annotation.Target;
 import java.nio.charset.Charset;
 
 import javax.annotation.PostConstruct;

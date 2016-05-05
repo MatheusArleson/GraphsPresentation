@@ -79,29 +79,33 @@ function doAlgorithm(algName, nodeId, targetNode, isDirected){
 	
 	var nodeSelector = '#' + nodeId;
 	var alg;
-	var isDijkstra = false;
+	var algSize;
 	
 	switch (algName) {
 	case 'BFS':
 		alg = cy.elements().bfs(nodeSelector, function(){}, isDirected);
-		isDijkstra = false;
+		algSize = alg.path.length;
 		break;
 	
 	case 'DFS':
 		alg = cy.elements().dfs(nodeSelector, function(){}, isDirected);
-		isDijkstra = false;
+		algSize = alg.path.length;
 		break;
 	
 	case 'DIJ':
 		alg = cy.elements().dijkstra(nodeSelector, function(){ return this.data('label'); }, isDirected);
-		isDijkstra = true;
 		
 		var targetNodeSelector = '#' + targetNode;
 		var algPath = alg.pathTo(targetNodeSelector);
-		var algDistance = (alg.distanceTo(targetNodeSelector)).length;
 		
-		console.log(algPath);
-		console.log(algDistance);
+		var algDistance = (alg.distanceTo(targetNodeSelector)).length;
+		algSize = algDistance;
+		
+		break;
+	
+	case 'KRU':
+		alg = cy.elements().kruskal(function(){ return this.data('label'); });
+		algSize = alg.size();
 		
 		break;
 	
@@ -111,19 +115,26 @@ function doAlgorithm(algName, nodeId, targetNode, isDirected){
 
 	var i = 0;
 	var highlightNextEle = function() {
-		if(!isDijkstra){
-			if (i < alg.path.length) {
-				alg.path[i].addClass('highlighted');
-			}
-		} else {
-			if (i < algDistance) {
-				console.log(i);
-				algPath[i].addClass('highlighted');
-			}
+		console.log(i);
+		console.log(algSize);
+		switch (algName) {
+		case 'DIJ':
+			algPath[i].addClass('highlighted');
+			break;
+			
+		case 'KRU':
+			alg[i].addClass('highlighted');
+			break;
+
+		default:
+			alg.path[i].addClass('highlighted');
+			break;
 		}
 		
-		i++;
-		setTimeout(highlightNextEle, 1000);
+		if(i < algSize - 1){
+			i++;
+			setTimeout(highlightNextEle, 1000);
+		}
 	};
 
 	// kick off first highlight
